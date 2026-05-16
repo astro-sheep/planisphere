@@ -129,26 +129,6 @@ The interface includes responsive styling for:
 
 On smaller screens, panels stack vertically so the sheep do not have to operate a 1536px mission console from a phone.
 
----
-
-## 📁 Project structure
-
-```text
-.
-├── index.html
-├── README.md
-└── assets/
-    ├── observatory_division_logo.png
-    ├── logo_sheep.png
-    ├── badge_galaxy.png
-    ├── badge_globular.png
-    ├── badge_open_cluster.png
-    ├── badge_diffuse_nebula.png
-    ├── badge_planetary_nebula.png
-    └── badge_other.png
-```
-
-Depending on the version, there may be additional generated visual assets in `assets/`.
 
 ---
 
