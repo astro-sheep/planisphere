@@ -3151,6 +3151,889 @@ button,input,select{font:inherit} #viewport{position:fixed;left:0;top:0;width:15
   .moon-marker text{ fill:#ffe6c2; font-size:13px; font-weight:900; }
 </style>
 
+
+<style id="v52-small-desktop-responsive">
+  /* Small desktop / laptop mode: keep the desktop composition,
+     but compress widths so 1280-ish screens don't clip the right column. */
+  @media (min-width: 1101px) and (max-width: 1380px){
+    html, body{
+      overflow-x:hidden !important;
+    }
+    #viewport{
+      width:100vw !important;
+      height:980px !important;
+      left:0 !important;
+      top:0 !important;
+      transform:none !important;
+    }
+    .app{
+      width:100vw !important;
+      min-width:0 !important;
+      height:980px !important;
+    }
+
+    .brand{
+      left:22px !important;
+      top:18px !important;
+      width:360px !important;
+      gap:14px !important;
+    }
+    .brand img{
+      width:96px !important;
+      height:96px !important;
+      border-radius:24px !important;
+      flex:0 0 96px !important;
+    }
+    .brand h1{
+      font-size:40px !important;
+      line-height:1 !important;
+    }
+    .brand p{
+      font-size:15px !important;
+      letter-spacing:.22em !important;
+      margin-top:6px !important;
+    }
+
+    .top-controls{
+      left:50% !important;
+      transform:translateX(-50%) !important;
+      top:18px !important;
+      width:650px !important;
+      height:142px !important;
+      padding:16px 18px !important;
+      border-radius:24px !important;
+    }
+    .ctrl-row{gap:8px !important;}
+    .top-label{font-size:14px !important;}
+    .top-input,
+    .top-select,
+    .top-button{font-size:14px !important;}
+    #datetime{width:232px !important;}
+    #latInput,#lonInput{width:122px !important;}
+    #useLocationBtn{width:132px !important;}
+
+    .rounds{
+      right:18px !important;
+      top:18px !important;
+      gap:10px !important;
+    }
+    .round{
+      width:44px !important;
+      height:44px !important;
+      flex:0 0 44px !important;
+    }
+
+    .sky{
+      left:22px !important;
+      top:188px !important;
+      width:580px !important;
+      height:580px !important;
+    }
+
+    body.no-selection .visible-list-panel{
+      right:22px !important;
+      top:188px !important;
+      width:610px !important;
+      height:512px !important;
+      padding:16px !important;
+    }
+    body.no-selection .visible-list-wrap{
+      height:398px !important;
+      max-height:none !important;
+    }
+
+    body.has-selection .side-panel{
+      right:22px !important;
+      top:188px !important;
+      width:610px !important;
+      height:330px !important;
+      padding:18px 20px 14px !important;
+      overflow:hidden !important;
+    }
+    body.has-selection .panel-head{
+      grid-template-columns:1fr 144px !important;
+      gap:10px 14px !important;
+    }
+    body.has-selection .panel-head h2{font-size:30px !important;}
+    body.has-selection .panel-head h3{font-size:20px !important; margin:6px 0 6px !important;}
+    body.has-selection .panel-head p{font-size:14px !important;}
+    body.has-selection .object-img{
+      width:144px !important;
+      height:144px !important;
+      border-radius:20px !important;
+    }
+    body.has-selection .badge{font-size:12px !important; padding:7px 13px !important;}
+    body.has-selection .badges{margin:10px 0 8px !important;}
+    body.has-selection .fact{
+      grid-template-columns:104px 1fr !important;
+      min-height:24px !important;
+      padding:3px 0 !important;
+      font-size:14px !important;
+    }
+    body.has-selection .fact strong{font-size:14px !important;}
+    body.has-selection .sheep-note{
+      margin-top:6px !important;
+      padding:7px 10px !important;
+      font-size:11.5px !important;
+      gap:8px !important;
+    }
+    body.has-selection .sheep-note img{width:26px !important;height:26px !important;}
+
+    body.has-selection .visible-list-panel{
+      right:22px !important;
+      top:534px !important;
+      width:610px !important;
+      height:338px !important;
+      padding:16px !important;
+    }
+    body.has-selection .visible-list-wrap{
+      height:220px !important;
+      max-height:none !important;
+    }
+
+    .visible-list-head{font-size:16px !important;}
+    .visible-list-head .count{font-size:14px !important;}
+    .sky-extras{gap:10px !important; margin-bottom:10px !important;}
+    .sky-extra{padding:10px 12px !important; font-size:13px !important;}
+    .sky-extra .tagline{font-size:10.5px !important;}
+    .visible-list-table{font-size:13px !important;}
+    .visible-list-table thead th{font-size:12px !important; padding:9px 10px !important;}
+    .visible-list-table tbody td{padding:8px 10px !important;}
+
+    .filter-card,
+    body.has-selection .filter-card,
+    body.no-selection .filter-card{
+      left:22px !important;
+      top:786px !important;
+      width:300px !important;
+      height:132px !important;
+      padding:14px 16px !important;
+    }
+    .filter-row{font-size:13px !important;}
+    .filter-row strong{font-size:16px !important;}
+    .range{margin:8px 0 10px !important;}
+    #visibilityFilters{gap:8px !important; flex-wrap:nowrap !important;}
+    #visibilityFilters .chip{font-size:12px !important; padding:7px 12px !important;}
+
+    .legend,
+    body.has-selection .legend,
+    body.no-selection .legend{
+      left:338px !important;
+      top:786px !important;
+      width:264px !important;
+      min-height:132px !important;
+      padding:14px 16px !important;
+      display:grid !important;
+      grid-template-columns:1fr 1fr !important;
+      gap:10px 12px !important;
+    }
+    .legend button{
+      min-width:0 !important;
+      width:100% !important;
+      max-width:none !important;
+      justify-content:flex-start !important;
+      font-size:12px !important;
+      padding:4px 0 !important;
+    }
+    .dot{width:14px !important;height:14px !important;flex:0 0 14px !important;}
+  }
+</style>
+
+
+<style id="v53-small-desktop-layout-fix">
+  /* Robust small desktop / laptop layout */
+  @media (min-width: 1101px) and (max-width: 1450px){
+    html, body{overflow-x:hidden !important;}
+
+    #viewport{
+      width:100vw !important;
+      height:980px !important;
+      left:0 !important;
+      top:0 !important;
+      transform:none !important;
+    }
+    .app{
+      width:100vw !important;
+      min-width:0 !important;
+      height:980px !important;
+      --pad: 20px;
+      --gap: 22px;
+      --left-col: min(44vw, 600px);
+      --right-col: calc(100vw - (var(--pad) * 2) - var(--left-col) - var(--gap));
+    }
+
+    .brand{
+      left:var(--pad) !important;
+      top:18px !important;
+      width:calc(var(--left-col) - 20px) !important;
+      gap:14px !important;
+      z-index:30 !important;
+    }
+    .brand img{
+      width:88px !important;
+      height:88px !important;
+      border-radius:22px !important;
+      flex:0 0 88px !important;
+    }
+    .brand h1{
+      font-size:34px !important;
+      line-height:1 !important;
+      margin:0 !important;
+    }
+    .brand p{
+      font-size:14px !important;
+      letter-spacing:.20em !important;
+      margin-top:6px !important;
+    }
+
+    .top-controls{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      top:18px !important;
+      width:calc(var(--right-col) - 176px) !important;
+      min-width:460px !important;
+      height:142px !important;
+      padding:14px 16px !important;
+      border-radius:22px !important;
+      z-index:28 !important;
+    }
+    .top-controls .ctrl-row{ gap:8px !important; }
+    .top-controls .top-label{ font-size:13px !important; }
+    .top-controls .top-input,
+    .top-controls .top-select,
+    .top-controls .top-button{ font-size:13px !important; height:40px !important; }
+    .top-controls input[type="datetime-local"]{ width:230px !important; min-width:230px !important; }
+    .top-controls .coord{ width:120px !important; }
+    .top-controls .step{ width:96px !important; }
+    .top-controls .toggle-row{ gap:8px 14px !important; }
+    .top-controls .toggle-row label{ font-size:12px !important; }
+    #useLocationBtn{ width:136px !important; }
+    #messierCatalogBtn{ margin-left:0 !important; width:160px !important; }
+
+    .rounds{
+      right:var(--pad) !important;
+      top:18px !important;
+      gap:10px !important;
+      z-index:29 !important;
+    }
+    .round{
+      width:42px !important;
+      height:42px !important;
+      flex:0 0 42px !important;
+      font-size:18px !important;
+    }
+
+    .sky{
+      left:var(--pad) !important;
+      top:184px !important;
+      width:var(--left-col) !important;
+      height:var(--left-col) !important;
+      max-width:600px !important;
+      max-height:600px !important;
+    }
+
+    body.no-selection .visible-list-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:184px !important;
+      width:var(--right-col) !important;
+      height:690px !important;
+      padding:16px !important;
+    }
+    body.no-selection .visible-list-wrap{
+      height:560px !important;
+      max-height:none !important;
+    }
+
+    body.has-selection .side-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:184px !important;
+      width:var(--right-col) !important;
+      height:370px !important;
+      padding:18px 20px 14px !important;
+      overflow:hidden !important;
+    }
+    body.has-selection .panel-head{
+      grid-template-columns:1fr 148px !important;
+      gap:10px 14px !important;
+    }
+    body.has-selection .panel-head h2{ font-size:30px !important; }
+    body.has-selection .panel-head h3{ font-size:20px !important; margin:6px 0 6px !important; }
+    body.has-selection .panel-head p{ font-size:14px !important; }
+    body.has-selection .object-img{
+      width:148px !important;
+      height:148px !important;
+      border-radius:18px !important;
+    }
+    body.has-selection .badge{ padding:7px 12px !important; font-size:12px !important; }
+    body.has-selection .badges{ margin:10px 0 8px !important; }
+    body.has-selection .fact{
+      min-height:24px !important;
+      padding:3px 0 !important;
+      font-size:13px !important;
+      grid-template-columns:92px 1fr !important;
+    }
+    body.has-selection .fact strong{ font-size:13px !important; }
+    body.has-selection .sheep-note{
+      margin-top:6px !important;
+      padding:8px 10px !important;
+      font-size:11.5px !important;
+      line-height:1.25 !important;
+      gap:8px !important;
+    }
+    body.has-selection .sheep-note img{ width:26px !important; height:26px !important; }
+
+    body.has-selection .visible-list-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:570px !important;
+      width:var(--right-col) !important;
+      height:304px !important;
+      padding:16px !important;
+    }
+    body.has-selection .visible-list-wrap{
+      height:176px !important;
+      max-height:none !important;
+    }
+
+    .visible-list-head{ font-size:15px !important; }
+    .visible-list-head .count{ font-size:13px !important; }
+    .sky-extras{ gap:10px !important; margin-bottom:10px !important; }
+    .sky-extra{ padding:10px 12px !important; font-size:12.5px !important; }
+    .sky-extra .tagline{ font-size:10px !important; }
+    .visible-list-table{ font-size:12.5px !important; }
+    .visible-list-table thead th{ font-size:11.5px !important; padding:9px 10px !important; }
+    .visible-list-table tbody td{ padding:8px 10px !important; }
+
+    .filter-card,
+    body.has-selection .filter-card,
+    body.no-selection .filter-card{
+      left:var(--pad) !important;
+      right:auto !important;
+      top:804px !important;
+      width:calc(var(--left-col) * 0.53) !important;
+      min-width:290px !important;
+      max-width:330px !important;
+      height:120px !important;
+      padding:14px 16px !important;
+    }
+    .filter-row{ font-size:13px !important; }
+    .filter-row strong{ font-size:16px !important; }
+    .range{ margin:8px 0 8px !important; }
+    #visibilityFilters{ gap:8px !important; flex-wrap:nowrap !important; }
+    #visibilityFilters .chip{ font-size:12px !important; padding:7px 10px !important; }
+
+    .legend,
+    body.has-selection .legend,
+    body.no-selection .legend{
+      left:calc(var(--pad) + min(calc(var(--left-col) * 0.53), 330px) + 16px) !important;
+      right:auto !important;
+      top:804px !important;
+      width:calc(var(--left-col) - min(calc(var(--left-col) * 0.53), 330px) - 16px) !important;
+      min-width:220px !important;
+      min-height:120px !important;
+      padding:14px 16px !important;
+      display:grid !important;
+      grid-template-columns:1fr 1fr !important;
+      gap:10px 10px !important;
+    }
+    .legend button{
+      min-width:0 !important;
+      width:100% !important;
+      max-width:none !important;
+      justify-content:flex-start !important;
+      font-size:12px !important;
+      padding:3px 0 !important;
+      gap:8px !important;
+    }
+    .dot{ width:14px !important; height:14px !important; flex:0 0 14px !important; }
+  }
+</style>
+
+
+<style id="v54-small-desktop-hard-fix">
+  @media (min-width: 1101px) and (max-width: 1450px){
+    html,body{overflow-x:hidden !important;}
+    #viewport{
+      width:100vw !important;
+      height:1040px !important;
+      left:0 !important;
+      top:0 !important;
+      transform:none !important;
+    }
+    .app{
+      width:100vw !important;
+      height:1040px !important;
+      --pad: 18px;
+      --gap: 18px;
+      --left-col: min(46vw, 580px);
+      --right-col: calc(100vw - (var(--pad) * 2) - var(--left-col) - var(--gap));
+      --top-h: 208px;
+      --content-top: calc(var(--pad) + var(--top-h) + 14px);
+    }
+
+    .brand{
+      left:var(--pad) !important;
+      top:var(--pad) !important;
+      width:280px !important;
+      gap:12px !important;
+      z-index:30 !important;
+    }
+    .brand img{width:84px !important;height:84px !important;border-radius:20px !important;flex:0 0 84px !important;}
+    .brand h1{font-size:28px !important;line-height:1 !important;margin:0 !important;letter-spacing:.01em !important;}
+    .brand p{font-size:13px !important;letter-spacing:.17em !important;margin-top:6px !important;}
+
+    /* hide extra round buttons in this cramped range to avoid collisions */
+    .rounds{display:none !important;}
+
+    .top-controls{
+      left:320px !important;
+      top:var(--pad) !important;
+      width:calc(100vw - 338px) !important;
+      height:var(--top-h) !important;
+      padding:14px 16px !important;
+      border-radius:22px !important;
+      display:flex !important;
+      flex-direction:column !important;
+      gap:10px !important;
+      z-index:28 !important;
+      overflow:hidden !important;
+    }
+    .top-controls .ctrl-row{
+      display:grid !important;
+      align-items:center !important;
+      gap:10px !important;
+    }
+    .top-controls .ctrl-row:first-child{
+      grid-template-columns: 150px minmax(180px, 1.5fr) 56px 56px 116px 92px !important;
+    }
+    .top-controls .ctrl-row:nth-child(2){
+      grid-template-columns: 150px minmax(120px, 1fr) 150px minmax(120px, 1fr) 170px 170px !important;
+    }
+    .top-controls .top-label{display:block !important;width:auto !important;min-width:0 !important;margin:0 !important;font-size:13px !important;}
+    .top-controls .top-input,
+    .top-controls .top-select,
+    .top-controls .top-button{width:100% !important;min-width:0 !important;height:42px !important;font-size:13px !important;padding:0 12px !important;}
+    .top-controls .toggle-row{
+      display:flex !important;
+      flex-wrap:wrap !important;
+      gap:10px 20px !important;
+      margin-top:0 !important;
+      padding-left:2px !important;
+    }
+    .top-controls .toggle-row label{font-size:12px !important; white-space:nowrap !important;}
+    .top-controls input[type="checkbox"]{width:16px !important;height:16px !important;}
+    #messierCatalogBtn{background:rgba(255,132,84,.13) !important;border-color:rgba(255,132,84,.45) !important;color:#fff !important;}
+
+    .sky{
+      left:var(--pad) !important;
+      top:var(--content-top) !important;
+      width:var(--left-col) !important;
+      height:var(--left-col) !important;
+      max-width:580px !important;
+      max-height:580px !important;
+    }
+
+    body.no-selection .visible-list-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:var(--content-top) !important;
+      width:var(--right-col) !important;
+      height:640px !important;
+      padding:16px !important;
+    }
+    body.no-selection .visible-list-wrap{height:510px !important;max-height:none !important;}
+
+    body.has-selection .side-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:var(--content-top) !important;
+      width:var(--right-col) !important;
+      height:360px !important;
+      padding:18px 20px 14px !important;
+      overflow:hidden !important;
+    }
+    body.has-selection .panel-head{grid-template-columns:1fr 144px !important;gap:10px 14px !important;}
+    body.has-selection .panel-head h2{font-size:28px !important;}
+    body.has-selection .panel-head h3{font-size:19px !important;margin:6px 0 !important;}
+    body.has-selection .panel-head p{font-size:14px !important;}
+    body.has-selection .object-img{width:144px !important;height:144px !important;border-radius:18px !important;}
+    body.has-selection .badges{margin:10px 0 8px !important;}
+    body.has-selection .badge{padding:7px 11px !important;font-size:11.5px !important;}
+    body.has-selection .fact{grid-template-columns:88px 1fr !important;min-height:24px !important;padding:3px 0 !important;font-size:13px !important;}
+    body.has-selection .fact strong{font-size:13px !important;}
+    body.has-selection .sheep-note{margin-top:6px !important;padding:8px 10px !important;font-size:11.5px !important;line-height:1.25 !important;}
+
+    body.has-selection .visible-list-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:calc(var(--content-top) + 376px) !important;
+      width:var(--right-col) !important;
+      height:264px !important;
+      padding:16px !important;
+    }
+    body.has-selection .visible-list-wrap{height:140px !important;max-height:none !important;}
+
+    .visible-list-head{font-size:15px !important;}
+    .visible-list-head .count{font-size:13px !important;}
+    .sky-extras{gap:10px !important;margin-bottom:10px !important;}
+    .sky-extra{padding:10px 12px !important;font-size:12px !important;}
+    .sky-extra .tagline{font-size:10px !important;}
+    .visible-list-table{font-size:12px !important;}
+    .visible-list-table thead th{font-size:11px !important;padding:8px 10px !important;}
+    .visible-list-table tbody td{padding:8px 10px !important;}
+
+    .filter-card,
+    body.has-selection .filter-card,
+    body.no-selection .filter-card{
+      left:var(--pad) !important;
+      right:auto !important;
+      top:calc(var(--content-top) + var(--left-col) + 16px) !important;
+      width:calc(var(--left-col) * 0.52) !important;
+      max-width:300px !important;
+      min-width:280px !important;
+      height:122px !important;
+      padding:14px 16px !important;
+    }
+    .filter-row{font-size:13px !important;}
+    .filter-row strong{font-size:16px !important;}
+    .range{margin:8px 0 !important;}
+    #visibilityFilters{gap:8px !important;flex-wrap:nowrap !important;}
+    #visibilityFilters .chip{font-size:11.5px !important;padding:7px 10px !important;}
+
+    .legend,
+    body.has-selection .legend,
+    body.no-selection .legend{
+      left:calc(var(--pad) + min(calc(var(--left-col) * 0.52), 300px) + 16px) !important;
+      right:auto !important;
+      top:calc(var(--content-top) + var(--left-col) + 16px) !important;
+      width:calc(var(--left-col) - min(calc(var(--left-col) * 0.52), 300px) - 16px) !important;
+      min-width:240px !important;
+      min-height:122px !important;
+      padding:14px 16px !important;
+      display:grid !important;
+      grid-template-columns:1fr 1fr !important;
+      gap:10px 10px !important;
+    }
+    .legend button{width:100% !important;min-width:0 !important;max-width:none !important;justify-content:flex-start !important;font-size:12px !important;padding:2px 0 !important;}
+    .dot{width:14px !important;height:14px !important;flex:0 0 14px !important;}
+  }
+</style>
+
+
+<style id="v55-small-desktop-header-separation">
+  /* Final fix for small desktop / laptop screens:
+     logo/title and controls must never overlap. */
+  @media (min-width: 1101px) and (max-width: 1450px){
+    html, body{
+      overflow-x:hidden !important;
+    }
+
+    #viewport{
+      width:100vw !important;
+      height:1120px !important;
+      left:0 !important;
+      top:0 !important;
+      transform:none !important;
+    }
+
+    .app{
+      width:100vw !important;
+      min-width:0 !important;
+      height:1120px !important;
+      --pad:20px;
+      --gap:20px;
+      --header-h:116px;
+      --controls-h:160px;
+      --controls-top:136px;
+      --content-top:318px;
+      --left-col:min(45vw, 600px);
+      --right-col:calc(100vw - (var(--pad) * 2) - var(--left-col) - var(--gap));
+    }
+
+    .brand{
+      left:var(--pad) !important;
+      top:18px !important;
+      width:calc(100vw - 40px) !important;
+      height:96px !important;
+      display:flex !important;
+      align-items:center !important;
+      gap:16px !important;
+      z-index:40 !important;
+    }
+
+    .brand img{
+      width:92px !important;
+      height:92px !important;
+      flex:0 0 92px !important;
+      border-radius:22px !important;
+    }
+
+    .brand h1{
+      font-size:42px !important;
+      line-height:1 !important;
+      margin:0 !important;
+      white-space:nowrap !important;
+    }
+
+    .brand p{
+      font-size:15px !important;
+      letter-spacing:.24em !important;
+      margin-top:7px !important;
+      white-space:nowrap !important;
+    }
+
+    .rounds{
+      display:none !important;
+    }
+
+    .top-controls{
+      left:var(--pad) !important;
+      right:auto !important;
+      top:var(--controls-top) !important;
+      width:calc(100vw - 40px) !important;
+      height:var(--controls-h) !important;
+      transform:none !important;
+      padding:14px 16px !important;
+      border-radius:22px !important;
+      display:flex !important;
+      flex-direction:column !important;
+      gap:10px !important;
+      z-index:30 !important;
+      overflow:hidden !important;
+    }
+
+    .top-controls .ctrl-row{
+      display:grid !important;
+      align-items:center !important;
+      gap:10px !important;
+      margin:0 !important;
+    }
+
+    .top-controls .ctrl-row:first-child{
+      grid-template-columns:130px minmax(250px, 1fr) 48px 48px 104px 92px !important;
+    }
+
+    .top-controls .ctrl-row:nth-child(2){
+      grid-template-columns:130px minmax(120px, 1fr) 130px minmax(120px, 1fr) 150px 150px !important;
+    }
+
+    .top-controls .top-label{
+      width:auto !important;
+      min-width:0 !important;
+      margin:0 !important;
+      font-size:13px !important;
+      white-space:nowrap !important;
+    }
+
+    .top-controls .top-input,
+    .top-controls .top-select,
+    .top-controls .top-button{
+      width:100% !important;
+      min-width:0 !important;
+      height:40px !important;
+      font-size:13px !important;
+      padding:0 10px !important;
+      box-sizing:border-box !important;
+    }
+
+    .top-controls .toggle-row{
+      display:flex !important;
+      flex-wrap:wrap !important;
+      align-items:center !important;
+      gap:8px 18px !important;
+      margin:0 !important;
+      padding:0 !important;
+    }
+
+    .top-controls .toggle-row label{
+      font-size:12px !important;
+      white-space:nowrap !important;
+    }
+
+    .top-controls input[type="checkbox"]{
+      width:16px !important;
+      height:16px !important;
+    }
+
+    #messierCatalogBtn{
+      margin-left:0 !important;
+      background:rgba(255,132,84,.15) !important;
+      border-color:rgba(255,132,84,.48) !important;
+    }
+
+    .sky{
+      left:var(--pad) !important;
+      top:var(--content-top) !important;
+      width:var(--left-col) !important;
+      height:var(--left-col) !important;
+      max-width:600px !important;
+      max-height:600px !important;
+    }
+
+    body.no-selection .visible-list-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:var(--content-top) !important;
+      width:var(--right-col) !important;
+      height:620px !important;
+      padding:16px !important;
+    }
+
+    body.no-selection .visible-list-wrap{
+      height:490px !important;
+      max-height:none !important;
+    }
+
+    body.has-selection .side-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:var(--content-top) !important;
+      width:var(--right-col) !important;
+      height:360px !important;
+      padding:18px 20px 14px !important;
+      overflow:hidden !important;
+    }
+
+    body.has-selection .visible-list-panel{
+      left:calc(var(--pad) + var(--left-col) + var(--gap)) !important;
+      right:auto !important;
+      top:calc(var(--content-top) + 376px) !important;
+      width:var(--right-col) !important;
+      height:244px !important;
+      padding:16px !important;
+    }
+
+    body.has-selection .visible-list-wrap{
+      height:124px !important;
+      max-height:none !important;
+    }
+
+    body.has-selection .panel-head{
+      grid-template-columns:1fr 140px !important;
+      gap:10px 14px !important;
+    }
+
+    body.has-selection .object-img{
+      width:140px !important;
+      height:140px !important;
+      border-radius:18px !important;
+    }
+
+    body.has-selection .panel-head h2{
+      font-size:28px !important;
+    }
+
+    body.has-selection .panel-head h3{
+      font-size:19px !important;
+      margin:6px 0 !important;
+    }
+
+    body.has-selection .panel-head p{
+      font-size:13px !important;
+    }
+
+    body.has-selection .badge{
+      font-size:11.5px !important;
+      padding:7px 11px !important;
+    }
+
+    body.has-selection .badges{
+      margin:10px 0 8px !important;
+    }
+
+    body.has-selection .fact{
+      min-height:23px !important;
+      padding:3px 0 !important;
+      font-size:12.5px !important;
+      grid-template-columns:88px 1fr !important;
+    }
+
+    body.has-selection .fact strong{
+      font-size:12.5px !important;
+    }
+
+    body.has-selection .sheep-note{
+      margin-top:6px !important;
+      padding:7px 9px !important;
+      font-size:11px !important;
+      line-height:1.22 !important;
+    }
+
+    .visible-list-head{
+      font-size:15px !important;
+    }
+
+    .visible-list-head .count{
+      font-size:13px !important;
+    }
+
+    .sky-extras{
+      gap:10px !important;
+      margin-bottom:10px !important;
+    }
+
+    .sky-extra{
+      padding:9px 11px !important;
+      font-size:12px !important;
+    }
+
+    .sky-extra .tagline{
+      font-size:10px !important;
+    }
+
+    .visible-list-table{
+      font-size:12px !important;
+    }
+
+    .visible-list-table thead th{
+      font-size:11px !important;
+      padding:8px 10px !important;
+    }
+
+    .visible-list-table tbody td{
+      padding:8px 10px !important;
+    }
+
+    .filter-card,
+    body.has-selection .filter-card,
+    body.no-selection .filter-card{
+      left:var(--pad) !important;
+      right:auto !important;
+      top:calc(var(--content-top) + var(--left-col) + 18px) !important;
+      width:calc((var(--left-col) - 16px) * .55) !important;
+      min-width:280px !important;
+      height:122px !important;
+      padding:14px 16px !important;
+    }
+
+    .legend,
+    body.has-selection .legend,
+    body.no-selection .legend{
+      left:calc(var(--pad) + ((var(--left-col) - 16px) * .55) + 16px) !important;
+      right:auto !important;
+      top:calc(var(--content-top) + var(--left-col) + 18px) !important;
+      width:calc(var(--left-col) - ((var(--left-col) - 16px) * .55) - 16px) !important;
+      min-width:240px !important;
+      min-height:122px !important;
+      padding:14px 16px !important;
+      display:grid !important;
+      grid-template-columns:1fr 1fr !important;
+      gap:10px 10px !important;
+    }
+
+    .legend button{
+      min-width:0 !important;
+      width:100% !important;
+      max-width:none !important;
+      justify-content:flex-start !important;
+      font-size:12px !important;
+      padding:2px 0 !important;
+      gap:8px !important;
+    }
+  }
+</style>
+
 </head>
 <body>
 <div id="viewport"><div class="app">
