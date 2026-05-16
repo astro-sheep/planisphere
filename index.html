@@ -1,0 +1,3552 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AstroSheeps Planisphere</title>
+<style>
+:root{--bg:#020714;--panel:rgba(5,14,30,.72);--panel2:rgba(4,12,26,.95);--line:rgba(196,222,255,.28);--lineSoft:rgba(196,222,255,.12);--text:#f5f8ff;--muted:#a9b6c7;--cyan:#58e6ff;--mint:#78ff9d;--violet:#d28cff;--gold:#ffd84d;--shadow:0 24px 90px rgba(0,0,0,.58);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+*{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text)}
+body:before{content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at 22% 45%,rgba(88,230,255,.15),transparent 30rem),radial-gradient(circle at 77% 20%,rgba(210,140,255,.10),transparent 25rem),linear-gradient(180deg,#020713 0%,#061426 57%,#020713 100%)}
+body:after{content:"";position:fixed;inset:-20%;z-index:-2;opacity:.23;background-image:radial-gradient(circle,rgba(255,255,255,.9) 0 1px,transparent 1.7px),radial-gradient(circle,rgba(88,230,255,.55) 0 1px,transparent 1.6px);background-size:86px 86px,148px 148px;background-position:8px 10px,66px 42px;animation:drift 90s linear infinite} @keyframes drift{to{transform:translate3d(-90px,42px,0)}}
+button,input,select{font:inherit} #viewport{position:fixed;left:0;top:0;width:1536px;height:1024px;transform-origin:top left} .app{position:relative;width:1536px;height:1024px}
+.brand{position:absolute;left:26px;top:26px;display:flex;align-items:center;gap:14px;z-index:20} .brand img{width:60px;height:60px;border-radius:18px;object-fit:cover;box-shadow:0 0 30px rgba(88,230,255,.2)} .brand h1{margin:0;font-size:30px;line-height:1;font-weight:900;letter-spacing:.025em} .brand p{margin:7px 0 0;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:rgba(245,248,255,.88);font-weight:700}
+.top-controls{position:absolute;left:454px;top:25px;display:flex;gap:18px;z-index:20} .ctrl{height:64px;border:1px solid var(--line);border-radius:20px;background:rgba(6,16,33,.66);backdrop-filter:blur(18px);display:flex;align-items:center;gap:14px;padding:10px 18px;box-shadow:inset 0 0 24px rgba(255,255,255,.025)} .ctrl.location{width:266px} .ctrl.date{width:210px} .ctrl.time{width:174px} .ctrl .icon{font-size:24px;color:var(--mint);width:24px;text-align:center} .ctrl.date .icon{color:var(--violet)} .ctrl.time .icon{color:#dcecff} .ctrl label{display:block;font-size:12px;color:var(--muted);margin-bottom:2px} .ctrl select,.ctrl input{border:0;background:transparent;color:var(--text);outline:0;font-weight:800;width:100%;font-size:16px} .ctrl small{display:block;color:rgba(245,248,255,.7);font-size:12px;font-weight:600} .ctrl option{color:#061426}
+.rounds{position:absolute;right:138px;top:34px;display:flex;gap:18px;z-index:20} .round{width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:rgba(6,16,33,.64);color:var(--text);font-size:22px;display:grid;place-items:center;cursor:pointer}
+.sky{position:absolute;left:54px;top:116px;width:820px;height:820px;z-index:2} .sky svg{width:100%;height:100%;display:block;overflow:visible}
+.side-panel{position:absolute;right:26px;top:114px;width:430px;height:560px;padding:24px 28px 18px;border:1px solid rgba(196,222,255,.38);border-radius:24px;background:linear-gradient(180deg,rgba(6,15,31,.88),rgba(3,10,22,.78));backdrop-filter:blur(20px);box-shadow:var(--shadow);z-index:10;overflow:visible}
+.panel-head{display:grid;grid-template-columns:1fr;gap:16px;align-items:start} .panel-head h2{margin:0;color:var(--violet);font-size:32px;line-height:1;font-weight:900} .panel-head h3{margin:9px 0 8px;font-size:19px;line-height:1.15} .panel-head p{margin:0;color:var(--muted);font-size:14px} .object-img{width:100%;height:230px;border-radius:24px;background-color:#061426;background-position:center center;background-repeat:no-repeat;background-size:112% 112%;box-shadow:0 0 34px rgba(88,230,255,.18);border:1px solid rgba(196,222,255,.16);overflow:hidden}
+.badges{display:flex;gap:9px;flex-wrap:wrap;margin:22px 0 16px} .badge{padding:8px 14px;border-radius:999px;border:1px solid currentColor;background:rgba(255,255,255,.035);font-size:12px;font-weight:900;letter-spacing:.04em} .badge.violet{color:var(--violet)} .badge.mint{color:var(--mint)}
+.facts{margin-top:6px} .fact{display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:center;min-height:34px;border-top:1px solid var(--lineSoft);color:var(--muted);font-size:14px;padding:7px 0} .fact strong{font-weight:500;color:var(--text);text-align:right;white-space:nowrap} 
+.filter-card{position:absolute;right:26px;top:690px;width:430px;height:150px;border:1px solid rgba(196,222,255,.28);border-radius:20px;background:rgba(6,16,33,.72);backdrop-filter:blur(18px);box-shadow:var(--shadow);padding:18px 20px;z-index:12} .filter-row{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:15px} .filter-row strong{color:var(--mint);font-size:19px} .range{width:100%;height:20px;margin:10px 0 14px;appearance:none;background:transparent;cursor:pointer;--progress:37.5%} .range::-webkit-slider-runnable-track{height:4px;border-radius:999px;background:linear-gradient(90deg,var(--mint) 0 var(--progress),rgba(168,182,201,.35) var(--progress) 100%)} .range::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:#dcefff;border:2px solid rgba(115,255,158,.9);margin-top:-6px;box-shadow:0 0 18px rgba(115,255,158,.35)} .range::-moz-range-track{height:4px;border-radius:999px;background:linear-gradient(90deg,var(--mint) 0 var(--progress),rgba(168,182,201,.35) var(--progress) 100%)} .range::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#dcefff;border:2px solid rgba(115,255,158,.9);box-shadow:0 0 18px rgba(115,255,158,.35)}
+.chips{display:flex;gap:8px;flex-wrap:wrap} .chip{padding:7px 13px;border:1px solid rgba(196,222,255,.2);border-radius:999px;background:rgba(5,10,22,.46);font-size:13px;color:var(--text);cursor:pointer} .chip.active{border-color:var(--violet);box-shadow:0 0 20px rgba(209,140,255,.18);background:rgba(209,140,255,.1)}
+.legend{position:absolute;right:26px;top:852px;width:430px;min-height:132px;padding:16px 18px;border:1px solid rgba(196,222,255,.22);border-radius:18px;background:rgba(6,16,33,.69);backdrop-filter:blur(18px);display:flex;align-items:flex-start;align-content:flex-start;gap:10px 12px;flex-wrap:wrap;z-index:12} .legend button{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--text);background:transparent;border:0;padding:6px 6px;border-radius:999px;cursor:pointer;min-width:170px} .legend button.off{opacity:.28} .dot{width:18px;height:18px;border-radius:50%;border:2px solid currentColor;display:inline-block}
+.sheep-scope{display:none!important}
+.skylabel{font-weight:900;fill:#58e6ff;font-size:29px} .altlabel,.azlabel{fill:rgba(245,248,255,.66);font-size:15px} .grid{stroke:rgba(88,230,255,.16);stroke-width:1;fill:none} .outer{stroke:rgba(245,248,255,.72);stroke-width:1.5;fill:rgba(3,13,28,.32)} .star{fill:rgba(245,250,255,.88)} .no-targets{fill:rgba(245,248,255,.72);font-size:18px;text-anchor:middle} .star-label{fill:rgba(245,248,255,.70);font-size:12px;paint-order:stroke;stroke:#020714;stroke-width:4px}
+.marker{cursor:pointer} .marker.below-limit{opacity:.24} .marker text{fill:#f5f9ff;font-size:14px;paint-order:stroke;stroke:#020714;stroke-width:5px} .marker circle.core{fill:rgba(3,10,22,.70);stroke-width:3} .marker circle.glow{opacity:.22;filter:url(#glow)} .selected circle.core{stroke-width:4.5} .selected .cross{stroke:currentColor;stroke-width:1.5}
+.catalog{position:fixed;inset:0;background:rgba(1,6,12,.62);backdrop-filter:blur(10px);display:none;z-index:100} .catalog.open{display:block} .catalog-panel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:920px;height:700px;border:1px solid rgba(196,222,255,.28);border-radius:24px;background:linear-gradient(180deg,rgba(6,15,31,.96),rgba(3,10,22,.96));box-shadow:var(--shadow);padding:24px} .catalog-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px} .catalog-head h2{margin:0;font-size:28px} .catalog-head .close{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text);cursor:pointer} .catalog-toolbar{display:flex;gap:12px;align-items:center;margin-bottom:14px} .tabs{display:flex;gap:8px} .tab{padding:10px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer} .tab.active{border-color:var(--violet);background:rgba(209,140,255,.12)} .search{flex:1;height:44px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.04);padding:0 14px;color:var(--text);outline:none} .catalog-list{height:560px;overflow:auto;padding-right:4px;display:grid;grid-template-columns:1fr 1fr;gap:10px} .catalog-item{border:1px solid rgba(196,222,255,.14);border-radius:16px;padding:12px 14px;background:rgba(255,255,255,.03);cursor:pointer} .catalog-item:hover{background:rgba(255,255,255,.055)} .catalog-item h4{margin:0 0 4px;font-size:15px} .catalog-meta{font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap} .catalog-alt{margin-top:6px;font-size:12px;color:rgba(245,248,255,.82)} .pill{display:inline-block;padding:3px 8px;border-radius:999px;background:rgba(88,230,255,.09);border:1px solid rgba(88,230,255,.18)}
+
+/* Readability fixes for catalog */
+.catalog-head h2{color:var(--text)!important}
+.tab{color:rgba(245,248,255,.86)!important;font-weight:800!important;background:rgba(255,255,255,.045)!important}
+.tab.active{color:#fff!important;background:rgba(209,140,255,.16)!important}
+.search{color:#fff!important;background:rgba(255,255,255,.055)!important;font-weight:650!important}
+.search::placeholder{color:rgba(245,248,255,.55)!important}
+.catalog-item{color:var(--text)!important;background:rgba(255,255,255,.04)!important}
+.catalog-item h4{color:#fff!important}
+.catalog-meta{color:rgba(245,248,255,.76)!important}
+.catalog-alt{color:rgba(245,248,255,.86)!important}
+.pill{color:rgba(230,250,255,.95)!important}
+
+</style>
+
+<style id="catalog-readable-final-fix">
+  #catalogModal,
+  #catalogModal * {
+    color: #f5f8ff;
+  }
+
+  #catalogModal button,
+  #catalogModal .tab,
+  #catalogModal .close {
+    color: #f5f8ff !important;
+    -webkit-text-fill-color: #f5f8ff !important;
+  }
+
+  #catalogModal .tab {
+    background: rgba(255,255,255,.055) !important;
+    border-color: rgba(196,222,255,.38) !important;
+    font-weight: 800 !important;
+  }
+
+  #catalogModal .tab.active {
+    background: rgba(209,140,255,.22) !important;
+    border-color: #d28cff !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  #catalogModal .search,
+  #catalogModal input.search {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: rgba(255,255,255,.075) !important;
+    border-color: rgba(196,222,255,.42) !important;
+    caret-color: #78ff9d !important;
+    font-weight: 700 !important;
+  }
+
+  #catalogModal .search::placeholder,
+  #catalogModal input.search::placeholder {
+    color: rgba(245,248,255,.68) !important;
+    -webkit-text-fill-color: rgba(245,248,255,.68) !important;
+    opacity: 1 !important;
+  }
+
+  #catalogModal .catalog-item {
+    background: rgba(255,255,255,.045) !important;
+    border-color: rgba(196,222,255,.18) !important;
+  }
+
+  #catalogModal .catalog-item h4 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+  }
+
+  #catalogModal .catalog-meta,
+  #catalogModal .catalog-alt {
+    color: rgba(245,248,255,.84) !important;
+    -webkit-text-fill-color: rgba(245,248,255,.84) !important;
+  }
+
+  #catalogModal .pill {
+    color: rgba(230,250,255,.96) !important;
+    -webkit-text-fill-color: rgba(230,250,255,.96) !important;
+  }
+</style>
+
+
+<style id="v16-top-controls-and-bigger-sphere">
+  .top-controls{
+    position:absolute !important;
+    left:300px !important;
+    top:18px !important;
+    width:980px !important;
+    min-height:116px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    gap:14px !important;
+    padding:14px 18px !important;
+    border:1px solid rgba(196,222,255,.28) !important;
+    border-radius:22px !important;
+    background:rgba(6,16,33,.72) !important;
+    backdrop-filter:blur(18px) !important;
+    box-shadow:var(--shadow) !important;
+    z-index:22 !important;
+  }
+  .top-controls .ctrl-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .top-controls .top-label{
+    color:rgba(245,248,255,.78);
+    font-size:13px;
+    font-weight:700;
+    min-width:108px;
+  }
+  .top-controls .top-input,
+  .top-controls .top-select,
+  .top-controls .top-button{
+    height:42px;
+    border-radius:10px;
+    border:1px solid rgba(196,222,255,.34);
+    background:rgba(255,255,255,.055);
+    color:#fff;
+    padding:0 12px;
+    font-size:15px;
+    outline:none;
+  }
+  .top-controls .top-input[type="datetime-local"]{
+    min-width:330px;
+  }
+  .top-controls .coord{
+    width:108px;
+  }
+  .top-controls .step{
+    width:120px;
+  }
+  .top-controls .top-button{
+    cursor:pointer;
+    font-weight:700;
+  }
+  .top-controls .toggle-row{
+    display:flex;
+    align-items:center;
+    gap:18px 22px;
+    flex-wrap:wrap;
+    padding-left:4px;
+  }
+  .top-controls .toggle-row label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:14px;
+    color:#f5f8ff;
+    white-space:nowrap;
+  }
+  .top-controls input[type="checkbox"]{
+    width:18px;
+    height:18px;
+    accent-color:#6ea6ff;
+  }
+  .rounds{
+    right:28px !important;
+    top:28px !important;
+    z-index:23 !important;
+  }
+  .sky{
+    left:32px !important;
+    top:146px !important;
+    width:900px !important;
+    height:900px !important;
+  }
+  .side-panel{
+    top:146px !important;
+    right:26px !important;
+  }
+  .filter-card{
+    top:730px !important;
+    right:26px !important;
+    width:430px !important;
+  }
+  .legend{
+    top:892px !important;
+    right:26px !important;
+    width:430px !important;
+  }
+</style>
+
+
+<style id="v17-header-layout-fix">
+  .brand{
+    left:26px !important;
+    top:20px !important;
+    z-index:30 !important;
+  }
+
+  .brand img{
+    width:96px !important;
+    height:96px !important;
+    border-radius:22px !important;
+  }
+
+  .brand h1{
+    font-size:40px !important;
+    line-height:1 !important;
+  }
+
+  .brand p{
+    font-size:17px !important;
+    letter-spacing:.17em !important;
+  }
+
+  .top-controls{
+    left:560px !important;
+    top:18px !important;
+    width:860px !important;
+    min-height:118px !important;
+    z-index:22 !important;
+  }
+
+  .top-controls .top-label{
+    min-width:150px !important;
+  }
+
+  .top-controls .top-input[type="datetime-local"]{
+    min-width:270px !important;
+    flex:1 1 270px !important;
+  }
+
+  .top-controls .coord{
+    width:120px !important;
+  }
+
+  .top-controls .top-button{
+    padding:0 14px !important;
+  }
+
+  .top-controls .toggle-row{
+    gap:14px 18px !important;
+  }
+
+  .rounds{
+    right:18px !important;
+    top:18px !important;
+    gap:14px !important;
+    z-index:24 !important;
+  }
+
+  .round{
+    width:52px !important;
+    height:52px !important;
+  }
+</style>
+
+
+<style id="v18-layout-reset">
+  /* Clean header / top bar layout */
+  .brand{
+    left:26px !important;
+    top:18px !important;
+    z-index:28 !important;
+    gap:12px !important;
+  }
+  .brand img{
+    width:72px !important;
+    height:72px !important;
+    border-radius:18px !important;
+  }
+  .brand h1{
+    font-size:28px !important;
+    line-height:1 !important;
+    margin:0 !important;
+  }
+  .brand p{
+    font-size:13px !important;
+    letter-spacing:.16em !important;
+    margin-top:6px !important;
+  }
+
+  /* hide floating round buttons to avoid collisions */
+  .rounds{
+    display:none !important;
+  }
+
+  .top-controls{
+    position:absolute !important;
+    left:250px !important;
+    top:20px !important;
+    width:1250px !important;
+    min-height:138px !important;
+    padding:14px 18px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    gap:12px !important;
+    border:1px solid rgba(196,222,255,.24) !important;
+    border-radius:24px !important;
+    background:rgba(6,16,33,.74) !important;
+    backdrop-filter:blur(18px) !important;
+    box-shadow:0 24px 90px rgba(0,0,0,.42) !important;
+    z-index:22 !important;
+  }
+  .top-controls .ctrl-row{
+    display:flex !important;
+    align-items:center !important;
+    gap:12px !important;
+    flex-wrap:wrap !important;
+  }
+  .top-controls .top-label{
+    min-width:140px !important;
+    color:rgba(245,248,255,.82) !important;
+    font-size:13px !important;
+    font-weight:700 !important;
+  }
+  .top-controls .top-input,
+  .top-controls .top-select,
+  .top-controls .top-button{
+    height:40px !important;
+    border-radius:12px !important;
+    border:1px solid rgba(196,222,255,.28) !important;
+    background:rgba(255,255,255,.055) !important;
+    color:#fff !important;
+    padding:0 12px !important;
+    font-size:14px !important;
+    outline:none !important;
+    box-sizing:border-box !important;
+  }
+  .top-controls .top-input[type="datetime-local"]{
+    width:300px !important;
+    min-width:300px !important;
+    flex:0 0 300px !important;
+  }
+  .top-controls .coord{
+    width:110px !important;
+  }
+  .top-controls .step{
+    width:110px !important;
+  }
+  .top-controls .top-button{
+    font-weight:700 !important;
+    cursor:pointer !important;
+  }
+  .top-controls .toggle-row{
+    display:flex !important;
+    align-items:center !important;
+    gap:12px 18px !important;
+    flex-wrap:wrap !important;
+    padding-left:2px !important;
+  }
+  .top-controls .toggle-row label{
+    font-size:13px !important;
+    white-space:nowrap !important;
+  }
+  .top-controls input[type="checkbox"]{
+    width:17px !important;
+    height:17px !important;
+  }
+
+  /* Bigger clean sky area */
+  .sky{
+    left:26px !important;
+    top:178px !important;
+    width:860px !important;
+    height:860px !important;
+    z-index:2 !important;
+  }
+
+  /* Right column starts below top-controls */
+  .side-panel{
+    right:26px !important;
+    top:178px !important;
+    width:430px !important;
+    height:500px !important;
+    padding:22px 26px 16px !important;
+    z-index:10 !important;
+  }
+  .panel-head h2{
+    font-size:30px !important;
+  }
+  .panel-head h3{
+    font-size:18px !important;
+    margin:8px 0 6px !important;
+  }
+  .object-img{
+    height:200px !important;
+  }
+
+  .filter-card{
+    right:26px !important;
+    top:692px !important;
+    width:430px !important;
+    height:146px !important;
+    left:auto !important;
+    bottom:auto !important;
+  }
+
+  .legend{
+    right:26px !important;
+    top:852px !important;
+    width:430px !important;
+    min-height:142px !important;
+    left:auto !important;
+    bottom:auto !important;
+    padding:14px 16px !important;
+  }
+  .legend button{
+    min-width:170px !important;
+    font-size:13px !important;
+  }
+</style>
+
+
+<style id="v19-fix-header-and-catalog">
+  .brand{
+    left:26px !important;
+    top:22px !important;
+    z-index:30 !important;
+  }
+  .brand img{
+    width:84px !important;
+    height:84px !important;
+    border-radius:20px !important;
+  }
+  .brand h1{
+    font-size:34px !important;
+    line-height:1 !important;
+    margin:0 !important;
+  }
+  .brand p{
+    font-size:14px !important;
+    letter-spacing:.17em !important;
+    margin-top:7px !important;
+  }
+
+  .top-controls{
+    left:610px !important;
+    top:24px !important;
+    width:900px !important;
+    min-height:154px !important;
+    padding:14px 16px !important;
+    z-index:24 !important;
+  }
+  .top-controls .ctrl-row{
+    gap:10px !important;
+  }
+  .top-controls .top-label{
+    min-width:120px !important;
+    font-size:13px !important;
+  }
+  .top-controls .top-input[type="datetime-local"]{
+    width:250px !important;
+    min-width:250px !important;
+    flex:0 0 250px !important;
+  }
+  .top-controls .coord{
+    width:92px !important;
+  }
+  .top-controls .step{
+    width:96px !important;
+  }
+  .top-controls .top-input,
+  .top-controls .top-select,
+  .top-controls .top-button{
+    height:38px !important;
+    font-size:13px !important;
+    border-radius:12px !important;
+    padding:0 10px !important;
+  }
+  .top-controls .toggle-row{
+    gap:10px 14px !important;
+  }
+  .top-controls .toggle-row label{
+    font-size:12px !important;
+  }
+  .top-controls input[type="checkbox"]{
+    width:16px !important;
+    height:16px !important;
+  }
+
+  #messierCatalogBtn{
+    margin-left:auto !important;
+    background:rgba(209,140,255,.14) !important;
+    border-color:rgba(209,140,255,.45) !important;
+    color:#fff !important;
+    font-weight:800 !important;
+  }
+
+  .catalog-panel{
+    width:880px !important;
+    height:680px !important;
+  }
+  .catalog-head h2{
+    color:#fff !important;
+  }
+  .catalog-toolbar{
+    justify-content:space-between !important;
+  }
+  .catalog-toolbar .tab{
+    pointer-events:none !important;
+    opacity:1 !important;
+  }
+</style>
+
+
+<style id="v20-card-images-and-panel-spacing">
+  /* Right column spacing: no overlap between object card and Min Altitude panel */
+  .side-panel{
+    top:188px !important;
+    right:26px !important;
+    width:430px !important;
+    height:485px !important;
+    padding:20px 26px 16px !important;
+    overflow:hidden !important;
+  }
+
+  .filter-card{
+    top:695px !important;
+    right:26px !important;
+    left:auto !important;
+    bottom:auto !important;
+    width:430px !important;
+    height:150px !important;
+    padding:18px 20px !important;
+  }
+
+  .legend{
+    top:862px !important;
+    right:26px !important;
+    left:auto !important;
+    bottom:auto !important;
+    width:430px !important;
+    min-height:132px !important;
+  }
+
+  /* Badge-style card art */
+  .object-img{
+    width:100% !important;
+    height:190px !important;
+    border-radius:30px !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-size:cover !important;
+    border:1px solid rgba(196,222,255,.20) !important;
+    box-shadow:
+      0 0 36px rgba(88,230,255,.18),
+      inset 0 0 28px rgba(255,255,255,.035) !important;
+    overflow:hidden !important;
+  }
+
+  .panel-head{
+    gap:12px !important;
+  }
+
+  .panel-head h2{
+    font-size:28px !important;
+  }
+
+  .panel-head h3{
+    font-size:17px !important;
+    margin:6px 0 5px !important;
+  }
+
+  .panel-head p{
+    font-size:13px !important;
+  }
+
+  .badges{
+    margin:14px 0 10px !important;
+  }
+
+  .badge{
+    padding:7px 12px !important;
+    font-size:11px !important;
+  }
+
+  .facts{
+    margin-top:4px !important;
+  }
+
+  .fact{
+    min-height:30px !important;
+    padding:5px 0 !important;
+    font-size:13px !important;
+    grid-template-columns:82px 1fr !important;
+  }
+
+  .fact strong{
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  /* Keep Min Altitude away from the card border visually */
+  .filter-card .filter-row{
+    font-size:14px !important;
+  }
+
+  .range{
+    margin:10px 0 12px !important;
+  }
+</style>
+
+
+<style id="v21-round-badge-card-image">
+  .panel-head{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    gap:14px !important;
+  }
+
+  .object-img{
+    width:180px !important;
+    height:180px !important;
+    border-radius:50% !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-size:cover !important;
+    border:1px solid rgba(196,222,255,.22) !important;
+    box-shadow:
+      0 0 34px rgba(88,230,255,.18),
+      inset 0 0 24px rgba(255,255,255,.04) !important;
+    overflow:hidden !important;
+    align-self:center !important;
+    margin:4px auto 2px auto !important;
+  }
+
+  .side-panel{
+    height:500px !important;
+  }
+
+  .badges{
+    margin:10px 0 10px !important;
+  }
+
+  .facts{
+    margin-top:2px !important;
+  }
+
+  .fact{
+    min-height:28px !important;
+    padding:4px 0 !important;
+  }
+</style>
+
+
+<style id="v22-use-new-brand-logo">
+  .brand{
+    left:26px !important;
+    top:20px !important;
+    gap:16px !important;
+    z-index:30 !important;
+  }
+
+  .brand img{
+    width:104px !important;
+    height:104px !important;
+    border-radius:22px !important;
+    object-fit:cover !important;
+    box-shadow:0 0 28px rgba(255,255,255,.08) !important;
+    background:#000 !important;
+  }
+
+  .brand h1{
+    font-size:34px !important;
+    line-height:1 !important;
+    margin:0 !important;
+  }
+
+  .brand p{
+    font-size:14px !important;
+    letter-spacing:.16em !important;
+    margin-top:8px !important;
+  }
+
+  /* Give the header a bit more breathing room from the controls */
+  .top-controls{
+    top:26px !important;
+  }
+</style>
+
+
+<style id="v23-astrosheeps-card-style">
+  /* Right card styling closer to AstroSheeps patch aesthetic */
+  .side-panel{
+    border:1px solid rgba(255,132,84,.34) !important;
+    background:
+      radial-gradient(circle at 72% 30%, rgba(255,132,84,.10), transparent 26%),
+      linear-gradient(180deg, rgba(8,16,32,.94), rgba(4,10,22,.94)) !important;
+    box-shadow:
+      0 24px 90px rgba(0,0,0,.58),
+      inset 0 0 0 1px rgba(255,132,84,.05) !important;
+  }
+
+  .panel-head{
+    display:grid !important;
+    grid-template-columns: 1fr 182px !important;
+    align-items:start !important;
+    gap:12px 18px !important;
+  }
+
+  .panel-head > div:first-child{
+    min-width:0 !important;
+  }
+
+  .panel-head h2{
+    color:#ff8554 !important;
+    text-shadow:0 0 18px rgba(255,132,84,.16) !important;
+  }
+
+  .panel-head h3{
+    color:#fff7ef !important;
+  }
+
+  .panel-head p{
+    color:rgba(255,236,220,.72) !important;
+  }
+
+  .object-img{
+    width:170px !important;
+    height:170px !important;
+    border-radius:50% !important;
+    justify-self:end !important;
+    align-self:start !important;
+    margin:0 !important;
+    background-color:#07111f !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-size:82% 82% !important;
+    border:1px solid rgba(255,132,84,.32) !important;
+    box-shadow:
+      0 0 34px rgba(255,132,84,.14),
+      inset 0 0 28px rgba(255,255,255,.035) !important;
+    overflow:hidden !important;
+  }
+
+  .badges{
+    margin:12px 0 12px !important;
+  }
+
+  .badge{
+    background:rgba(255,255,255,.025) !important;
+    font-weight:900 !important;
+  }
+
+  .badge.violet{
+    color:#ff8554 !important;
+    border-color:rgba(255,132,84,.85) !important;
+    box-shadow:0 0 18px rgba(255,132,84,.10) !important;
+  }
+
+  .badge.mint{
+    color:#ffe0c2 !important;
+    border-color:rgba(255,173,116,.78) !important;
+  }
+
+  .facts{
+    margin-top:8px !important;
+  }
+
+  .fact{
+    border-top:1px solid rgba(255,132,84,.14) !important;
+    color:rgba(255,238,226,.72) !important;
+  }
+
+  .fact strong{
+    color:#fff7ef !important;
+  }
+</style>
+
+
+<style id="v24-square-card-image-fix">
+  .object-img{
+    width:172px !important;
+    height:172px !important;
+    border-radius:26px !important;
+    justify-self:end !important;
+    align-self:start !important;
+    margin:0 !important;
+    background-color:#07111f !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-size:cover !important;
+    border:1px solid rgba(255,132,84,.26) !important;
+    box-shadow:
+      0 0 28px rgba(255,132,84,.10),
+      inset 0 0 18px rgba(255,255,255,.03) !important;
+    overflow:hidden !important;
+  }
+</style>
+
+
+<style id="v25-orange-controls-and-single-border">
+  /* Remove the extra border feel around the object image */
+  .object-img{
+    border:none !important;
+    box-shadow:0 0 26px rgba(255,132,84,.10) !important;
+  }
+
+  /* Make the Messier catalog button orange */
+  #messierCatalogBtn{
+    background:rgba(255,132,84,.18) !important;
+    border:1px solid rgba(255,132,84,.55) !important;
+    color:#fff3ea !important;
+    box-shadow:0 0 18px rgba(255,132,84,.12) !important;
+  }
+  #messierCatalogBtn:hover{
+    background:rgba(255,132,84,.26) !important;
+  }
+
+  /* Orange altitude control styling */
+  .filter-card{
+    border-color:rgba(255,132,84,.28) !important;
+    box-shadow:0 18px 60px rgba(0,0,0,.46), inset 0 0 0 1px rgba(255,132,84,.05) !important;
+  }
+  .filter-card .filter-row strong,
+  #minAltLabel{
+    color:#ff8554 !important;
+  }
+  .range{
+    --progress:37.5%;
+  }
+  .range::-webkit-slider-runnable-track{
+    background:linear-gradient(90deg,#ff8554 0 var(--progress),rgba(168,182,201,.35) var(--progress) 100%) !important;
+  }
+  .range::-webkit-slider-thumb{
+    background:#fff1e9 !important;
+    border:2px solid rgba(255,132,84,.95) !important;
+    box-shadow:0 0 18px rgba(255,132,84,.35) !important;
+  }
+  .range::-moz-range-track{
+    background:linear-gradient(90deg,#ff8554 0 var(--progress),rgba(168,182,201,.35) var(--progress) 100%) !important;
+  }
+  .range::-moz-range-thumb{
+    background:#fff1e9 !important;
+    border:2px solid rgba(255,132,84,.95) !important;
+    box-shadow:0 0 18px rgba(255,132,84,.35) !important;
+  }
+
+  /* Optional orange accent for active display mode chip to match */
+  #visibilityFilters .chip.active{
+    border-color:#ff8554 !important;
+    box-shadow:0 0 20px rgba(255,132,84,.18) !important;
+    background:rgba(255,132,84,.10) !important;
+  }
+</style>
+
+
+<style id="v26-tight-right-column-and-orange-planisphere">
+  /* Remove the large empty gap in the right column */
+  .side-panel{
+    height:440px !important;
+    top:188px !important;
+  }
+
+  .filter-card{
+    top:646px !important;
+    height:150px !important;
+  }
+
+  .legend{
+    top:812px !important;
+    min-height:126px !important;
+  }
+
+  /* Orange planisphere accents */
+  .skylabel{
+    fill:#ff8554 !important;
+    text-shadow:0 0 16px rgba(255,132,84,.18) !important;
+  }
+
+  .altlabel,
+  .azlabel{
+    fill:rgba(255,214,190,.72) !important;
+  }
+
+  .outer{
+    stroke:rgba(255,132,84,.55) !important;
+  }
+
+  .grid{
+    stroke:rgba(255,132,84,.14) !important;
+  }
+</style>
+
+
+<style id="v27-brand-update">
+  .brand{
+    left:24px !important;
+    top:18px !important;
+    gap:18px !important;
+    z-index:30 !important;
+  }
+
+  .brand img{
+    width:120px !important;
+    height:120px !important;
+    border-radius:24px !important;
+    object-fit:cover !important;
+    box-shadow:0 0 30px rgba(255,132,84,.10) !important;
+    background:#000 !important;
+  }
+
+  .brand h1{
+    font-size:42px !important;
+    line-height:1 !important;
+    margin:0 !important;
+    letter-spacing:.02em !important;
+    color:#f8f5ef !important;
+  }
+
+  .brand .brand-orange{
+    color:#ff8554 !important;
+  }
+
+  .brand p{
+    font-size:18px !important;
+    letter-spacing:.24em !important;
+    margin-top:8px !important;
+    color:#f8f5ef !important;
+    font-weight:800 !important;
+  }
+
+  /* give header room after larger logo */
+  .top-controls{
+    left:650px !important;
+    top:24px !important;
+    width:860px !important;
+  }
+</style>
+
+
+<style id="v28-planisphere-list-layout">
+  .brand p{ letter-spacing:.20em !important; }
+
+  .sky{
+    left:26px !important;
+    top:188px !important;
+    width:760px !important;
+    height:760px !important;
+  }
+
+  .visible-list-panel{
+    position:absolute;
+    left:26px;
+    top:826px;
+    width:1018px;
+    height:168px;
+    border:1px solid rgba(255,132,84,.24);
+    border-radius:20px;
+    background:rgba(6,16,33,.72);
+    backdrop-filter:blur(18px);
+    box-shadow:0 18px 60px rgba(0,0,0,.46), inset 0 0 0 1px rgba(255,132,84,.04);
+    padding:14px 18px 14px;
+    z-index:12;
+    overflow:hidden;
+  }
+
+  .visible-list-head{
+    font-size:15px;
+    font-weight:800;
+    letter-spacing:.03em;
+    color:#ff8554;
+    margin-bottom:10px;
+  }
+
+  .visible-list-wrap{
+    height:118px;
+    overflow:auto;
+    border-radius:14px;
+    border:1px solid rgba(255,132,84,.12);
+    background:rgba(255,255,255,.02);
+  }
+
+  .visible-list-wrap::-webkit-scrollbar{ width:10px; height:10px; }
+  .visible-list-wrap::-webkit-scrollbar-track{ background:rgba(255,255,255,.04); border-radius:999px; }
+  .visible-list-wrap::-webkit-scrollbar-thumb{ background:rgba(255,132,84,.28); border-radius:999px; }
+
+  .visible-list-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+    color:#f7f3ee;
+  }
+
+  .visible-list-table thead th{
+    position:sticky;
+    top:0;
+    z-index:1;
+    text-align:left;
+    font-size:12px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:rgba(255,224,204,.86);
+    background:rgba(255,132,84,.10);
+    padding:10px 12px;
+    border-bottom:1px solid rgba(255,132,84,.18);
+  }
+
+  .visible-list-table tbody td{
+    padding:9px 12px;
+    border-bottom:1px solid rgba(255,132,84,.10);
+    color:rgba(245,248,255,.92);
+  }
+
+  .visible-list-table tbody tr{
+    cursor:pointer;
+    transition:background .18s ease;
+  }
+
+  .visible-list-table tbody tr:hover{
+    background:rgba(255,132,84,.08);
+  }
+
+  .visible-list-table tbody tr.active{
+    background:rgba(255,132,84,.14);
+  }
+
+  .visible-list-table tbody td:first-child{
+    font-weight:900;
+    color:#ff8554;
+    width:90px;
+  }
+
+  .visible-list-table .empty{
+    text-align:center;
+    padding:18px 12px;
+    color:rgba(245,248,255,.7);
+  }
+
+  /* keep right column fitting with new list area */
+  .side-panel{
+    top:188px !important;
+    height:420px !important;
+  }
+
+  .object-img{ height:158px !important; width:158px !important; }
+  .badges{ margin:8px 0 8px !important; }
+  .fact{ min-height:26px !important; padding:3px 0 !important; font-size:12px !important; }
+  .fact strong{ font-size:12px !important; }
+  .panel-head h2{ font-size:26px !important; }
+  .panel-head h3{ font-size:16px !important; }
+
+  .filter-card{
+    top:622px !important;
+    height:138px !important;
+  }
+
+  .legend{
+    top:772px !important;
+    min-height:110px !important;
+    padding:12px 14px !important;
+  }
+  .legend button{ min-width:154px !important; font-size:12px !important; }
+</style>
+
+
+<style id="v29-side-list-layout">
+  .sky{
+    left:26px !important;
+    top:188px !important;
+    width:780px !important;
+    height:780px !important;
+  }
+
+  .side-panel{
+    position:absolute !important;
+    right:26px !important;
+    top:188px !important;
+    width:430px !important;
+    height:320px !important;
+    padding:20px 24px 16px !important;
+    overflow:hidden !important;
+  }
+
+  .panel-head h2{ font-size:26px !important; }
+  .panel-head h3{ font-size:16px !important; margin:6px 0 4px !important; }
+  .panel-head p{ font-size:13px !important; }
+  .object-img{ width:146px !important; height:146px !important; }
+  .badges{ margin:8px 0 8px !important; }
+  .facts{ margin-top:4px !important; }
+  .fact{ min-height:24px !important; padding:3px 0 !important; font-size:12px !important; }
+  .fact strong{ font-size:12px !important; }
+
+  .panel-empty{
+    height:100%; display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
+    gap:12px; color:rgba(245,248,255,.82);
+  }
+  .panel-empty .kicker{
+    color:#ff8554; font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase;
+  }
+  .panel-empty h3{ margin:0; font-size:24px; color:#fff7ef; }
+  .panel-empty p{ margin:0; font-size:14px; line-height:1.5; color:rgba(245,248,255,.74); max-width:340px; }
+
+  .panel-close{
+    position:absolute; right:18px; top:16px; width:32px; height:32px; border-radius:50%;
+    border:1px solid rgba(255,132,84,.36); background:rgba(255,132,84,.10); color:#fff3ea;
+    display:grid; place-items:center; cursor:pointer; font-size:16px; line-height:1;
+  }
+
+  .visible-list-panel{
+    position:absolute !important;
+    right:26px !important;
+    left:auto !important;
+    top:526px !important;
+    width:430px !important;
+    height:246px !important;
+    padding:14px 16px 14px !important;
+    overflow:hidden !important;
+  }
+  .visible-list-wrap{ height:198px !important; }
+  .visible-list-head{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .visible-list-head .count{ color:rgba(255,224,204,.74); font-size:12px; font-weight:700; }
+  .visible-list-table{ font-size:12px !important; }
+  .visible-list-table thead th{ padding:9px 10px !important; font-size:11px !important; }
+  .visible-list-table tbody td{ padding:8px 10px !important; }
+  .visible-list-table tbody td:first-child{ width:66px !important; }
+  .visible-list-table tbody td:nth-child(4){ white-space:nowrap; }
+
+  .filter-card{
+    right:26px !important; left:auto !important;
+    top:784px !important;
+    width:430px !important;
+    height:118px !important;
+    padding:14px 18px !important;
+  }
+  .filter-row{ font-size:14px !important; }
+  .filter-row strong{ font-size:18px !important; }
+  .range{ margin:8px 0 10px !important; }
+
+  .legend{
+    right:26px !important; left:auto !important;
+    top:914px !important;
+    width:430px !important;
+    min-height:86px !important;
+    padding:10px 12px !important;
+    gap:8px 10px !important;
+  }
+  .legend button{ min-width:128px !important; font-size:11px !important; gap:8px !important; padding:4px 4px !important; }
+  .dot{ width:16px !important; height:16px !important; }
+
+  /* ensure no overlap with top controls / logo */
+  .brand{ z-index:30 !important; }
+  .top-controls{ z-index:24 !important; }
+</style>
+
+
+<style id="v30-controls-under-sphere">
+  /* Keep the planisphere large and clean on the left */
+  .sky{
+    left:26px !important;
+    top:188px !important;
+    width:780px !important;
+    height:780px !important;
+  }
+
+  /* Right side: object card + object list */
+  .side-panel{
+    right:26px !important;
+    top:188px !important;
+    width:430px !important;
+    height:320px !important;
+  }
+
+  .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:526px !important;
+    width:430px !important;
+    height:246px !important;
+  }
+
+  /* Move controls below the sphere */
+  .filter-card{
+    left:26px !important;
+    right:auto !important;
+    top:986px !important;
+    width:780px !important;
+    height:150px !important;
+    padding:16px 20px !important;
+  }
+
+  .legend{
+    left:26px !important;
+    right:auto !important;
+    top:1150px !important;
+    width:780px !important;
+    min-height:96px !important;
+    padding:12px 18px !important;
+  }
+
+  /* Tune internals so the wide layout looks intentional */
+  .filter-row{ font-size:15px !important; }
+  .filter-row strong{ font-size:18px !important; }
+  .range{ margin:10px 0 12px !important; }
+  #visibilityFilters{ gap:14px !important; }
+
+  .legend{
+    display:flex !important;
+    align-items:center !important;
+    align-content:flex-start !important;
+    gap:10px 18px !important;
+    flex-wrap:wrap !important;
+  }
+  .legend button{
+    min-width:145px !important;
+    font-size:12px !important;
+    padding:6px 6px !important;
+    gap:10px !important;
+  }
+  .dot{ width:18px !important; height:18px !important; }
+</style>
+
+
+<style id="v31-scroll-and-horizontal-controls-fix">
+  /* Allow scrolling to the lower panels */
+  html, body{
+    height:auto !important;
+    min-height:100% !important;
+    overflow:auto !important;
+  }
+  #viewport{
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    width:1536px !important;
+    height:1180px !important;
+  }
+  .app{
+    width:1536px !important;
+    height:1180px !important;
+  }
+
+  /* Main layout */
+  .sky{
+    left:26px !important;
+    top:188px !important;
+    width:700px !important;
+    height:700px !important;
+  }
+
+  .side-panel{
+    right:26px !important;
+    top:188px !important;
+    width:430px !important;
+    height:320px !important;
+  }
+
+  .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:526px !important;
+    width:430px !important;
+    height:300px !important;
+  }
+  .visible-list-wrap{
+    height:252px !important;
+  }
+
+  /* Controls under the sphere */
+  .filter-card{
+    left:26px !important;
+    right:auto !important;
+    top:908px !important;
+    width:700px !important;
+    height:112px !important;
+    padding:14px 18px !important;
+  }
+  .filter-row{
+    font-size:14px !important;
+  }
+  .filter-row strong{
+    font-size:17px !important;
+  }
+  .range{
+    margin:8px 0 10px !important;
+  }
+  #visibilityFilters{
+    display:flex !important;
+    align-items:center !important;
+    gap:12px !important;
+    flex-wrap:nowrap !important;
+  }
+  #visibilityFilters .chip{
+    min-width:140px !important;
+    text-align:center !important;
+    justify-content:center !important;
+    padding:7px 14px !important;
+  }
+
+  .legend{
+    left:26px !important;
+    right:auto !important;
+    top:1032px !important;
+    width:700px !important;
+    min-height:94px !important;
+    padding:12px 16px !important;
+    display:flex !important;
+    align-items:center !important;
+    align-content:flex-start !important;
+    gap:10px 14px !important;
+    flex-wrap:wrap !important;
+  }
+  .legend button{
+    min-width:150px !important;
+    font-size:12px !important;
+    padding:4px 4px !important;
+    gap:8px !important;
+  }
+  .dot{
+    width:16px !important;
+    height:16px !important;
+  }
+
+  /* Keep top header clear */
+  .brand, .top-controls{ z-index:30 !important; }
+</style>
+
+
+<style id="v32-side-by-side-bottom-panels">
+  /* Put the two lower control panels side by side */
+  .filter-card{
+    left:26px !important;
+    right:auto !important;
+    top:908px !important;
+    width:340px !important;
+    height:158px !important;
+    padding:14px 18px !important;
+  }
+
+  .legend{
+    left:386px !important;
+    right:auto !important;
+    top:908px !important;
+    width:340px !important;
+    min-height:158px !important;
+    padding:12px 14px !important;
+    display:flex !important;
+    align-items:flex-start !important;
+    align-content:flex-start !important;
+    gap:8px 10px !important;
+    flex-wrap:wrap !important;
+  }
+
+  /* Tune the inside layout so both cards fit nicely */
+  .filter-row{ font-size:14px !important; }
+  .filter-row strong{ font-size:17px !important; }
+  .range{ margin:8px 0 10px !important; }
+
+  #visibilityFilters{
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    flex-wrap:wrap !important;
+  }
+  #visibilityFilters .chip{
+    min-width:0 !important;
+    padding:7px 12px !important;
+    font-size:12px !important;
+  }
+
+  .legend button{
+    min-width:146px !important;
+    font-size:12px !important;
+    padding:4px 4px !important;
+    gap:8px !important;
+  }
+  .dot{
+    width:16px !important;
+    height:16px !important;
+  }
+
+  /* Enough page height for the bottom row */
+  #viewport{ height:1090px !important; }
+  .app{ height:1090px !important; }
+</style>
+
+
+<style id="v33-long-horizontal-bottom-panels">
+  /* Longer side-by-side bottom panels in a single row */
+  .filter-card{
+    left:26px !important;
+    right:auto !important;
+    top:908px !important;
+    width:590px !important;
+    height:132px !important;
+    padding:14px 18px !important;
+  }
+
+  .legend{
+    left:636px !important;
+    right:auto !important;
+    top:908px !important;
+    width:590px !important;
+    min-height:132px !important;
+    padding:14px 18px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    align-content:center !important;
+    gap:10px 16px !important;
+    flex-wrap:wrap !important;
+  }
+
+  /* Tune filter panel for wide horizontal look */
+  .filter-row{ font-size:14px !important; }
+  .filter-row strong{ font-size:17px !important; }
+  .range{ margin:8px 0 10px !important; }
+  #visibilityFilters{
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    flex-wrap:nowrap !important;
+  }
+  #visibilityFilters .chip{
+    min-width:0 !important;
+    padding:7px 14px !important;
+    font-size:12px !important;
+    white-space:nowrap !important;
+  }
+
+  /* Tune legend for long horizontal strip */
+  .legend button{
+    min-width:165px !important;
+    font-size:12px !important;
+    padding:5px 4px !important;
+    gap:9px !important;
+    white-space:nowrap !important;
+  }
+  .dot{
+    width:16px !important;
+    height:16px !important;
+  }
+
+  /* Slightly reduce total page height since blocks are shorter */
+  #viewport{ height:1060px !important; }
+  .app{ height:1060px !important; }
+</style>
+
+
+<style id="v34-smart-list-expansion">
+  body.has-selection .side-panel{ display:block !important; }
+  body.no-selection .side-panel{ display:none !important; }
+
+  /* compact state when an object is selected */
+  body.has-selection .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:526px !important;
+    width:430px !important;
+    height:300px !important;
+  }
+  body.has-selection .visible-list-wrap{ height:252px !important; }
+
+  /* expanded state when no object is selected */
+  body.no-selection .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:188px !important;
+    width:720px !important;
+    height:638px !important;
+    padding:16px 18px !important;
+  }
+  body.no-selection .visible-list-wrap{ height:586px !important; }
+  body.no-selection .visible-list-head{
+    font-size:16px !important;
+    margin-bottom:12px !important;
+  }
+  body.no-selection .visible-list-table{
+    font-size:14px !important;
+  }
+  body.no-selection .visible-list-table thead th{
+    padding:11px 14px !important;
+    font-size:12px !important;
+  }
+  body.no-selection .visible-list-table tbody td{
+    padding:10px 14px !important;
+  }
+
+  /* keep lower controls where they are */
+  .filter-card{
+    left:26px !important;
+    top:908px !important;
+  }
+  .legend{
+    left:636px !important;
+    top:908px !important;
+  }
+</style>
+
+
+<style id="v36-moon-milkyway">
+  .sky-extras{
+    display:flex; gap:10px; flex-wrap:wrap; margin-bottom:10px;
+  }
+  .sky-extra{
+    flex:1 1 180px; min-width:180px;
+    border:1px solid rgba(255,132,84,.16);
+    border-radius:12px;
+    background:rgba(255,132,84,.06);
+    color:rgba(255,236,220,.92);
+    padding:8px 10px;
+    font-size:12px;
+    line-height:1.35;
+  }
+  .sky-extra strong{ color:#ff8554; font-weight:900; }
+  body.has-selection .visible-list-wrap{ height:192px !important; }
+  body.no-selection .visible-list-wrap{ height:526px !important; }
+  body.no-selection .sky-extras{ margin-bottom:12px !important; }
+  .moon-marker .glow{ filter:blur(6px); opacity:.35; }
+  .moon-marker .core{ fill:#fff4d0; stroke:#ffcf7a; stroke-width:2; }
+  .moon-marker text{ fill:#ffe6c2; font-size:12px; font-weight:800; }
+</style>
+
+
+<style id="v37-selected-layout-and-bigger-moon">
+  .moon-marker .glow{ filter:blur(8px); opacity:.42 !important; }
+  .moon-marker .core{ stroke-width:2.5 !important; }
+  .moon-marker text{ font-size:13px !important; font-weight:900 !important; }
+
+  /* Fill the right-side empty space better when an object is selected */
+  body.has-selection .side-panel{
+    display:block !important;
+    right:26px !important;
+    top:188px !important;
+    width:610px !important;
+    height:410px !important;
+    padding:22px 26px 16px !important;
+  }
+
+  body.has-selection .panel-head{
+    grid-template-columns:1fr 190px !important;
+    gap:14px 18px !important;
+    align-items:start !important;
+  }
+  body.has-selection .panel-head h2{
+    font-size:38px !important;
+  }
+  body.has-selection .panel-head h3{
+    font-size:24px !important;
+    margin:8px 0 7px !important;
+  }
+  body.has-selection .panel-head p{
+    font-size:16px !important;
+  }
+  body.has-selection .object-img{
+    width:190px !important;
+    height:190px !important;
+    border-radius:26px !important;
+    justify-self:end !important;
+    align-self:start !important;
+  }
+  body.has-selection .badges{
+    margin:16px 0 14px !important;
+  }
+  body.has-selection .badge{
+    font-size:14px !important;
+    padding:8px 16px !important;
+  }
+  body.has-selection .facts{
+    margin-top:4px !important;
+  }
+  body.has-selection .fact{
+    grid-template-columns:120px 1fr !important;
+    min-height:34px !important;
+    padding:7px 0 !important;
+    font-size:16px !important;
+  }
+  body.has-selection .fact strong{
+    font-size:16px !important;
+  }
+
+  body.has-selection .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:616px !important;
+    width:610px !important;
+    height:340px !important;
+    padding:16px 18px !important;
+  }
+  body.has-selection .visible-list-head{
+    font-size:16px !important;
+    margin-bottom:10px !important;
+  }
+  body.has-selection .visible-list-head .count{
+    font-size:14px !important;
+  }
+  body.has-selection .sky-extras{
+    gap:12px !important;
+    margin-bottom:12px !important;
+  }
+  body.has-selection .sky-extra{
+    min-width:0 !important;
+    flex:1 1 0 !important;
+    padding:10px 12px !important;
+    font-size:13px !important;
+  }
+  body.has-selection .visible-list-wrap{
+    height:224px !important;
+  }
+  body.has-selection .visible-list-table{
+    font-size:14px !important;
+  }
+  body.has-selection .visible-list-table thead th{
+    padding:10px 12px !important;
+    font-size:12px !important;
+  }
+  body.has-selection .visible-list-table tbody td{
+    padding:9px 12px !important;
+  }
+
+  /* Keep no-selection state as-is but slightly nicer */
+  body.no-selection .visible-list-panel{
+    width:720px !important;
+  }
+</style>
+
+
+<style id="v38-no-overlap-and-scroll-header">
+  /* Allow a bit more vertical room */
+  html, body{
+    height:auto !important;
+    min-height:100% !important;
+    overflow:auto !important;
+  }
+  #viewport{
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    width:1536px !important;
+    height:1180px !important;
+  }
+  .app{
+    width:1536px !important;
+    height:1180px !important;
+  }
+
+  /* In selected-object mode, keep the right column clean */
+  body.has-selection .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:616px !important;
+    width:610px !important;
+    height:320px !important;
+    padding:16px 18px !important;
+  }
+  body.has-selection .visible-list-wrap{
+    height:204px !important;
+  }
+
+  /* Move the type legend down so it does not overlap the list */
+  body.has-selection .legend{
+    left:636px !important;
+    right:auto !important;
+    top:950px !important;
+    width:590px !important;
+    min-height:132px !important;
+    padding:14px 18px !important;
+  }
+
+  /* Table header should scroll with the table, not stay sticky */
+  .visible-list-table thead th{
+    position:static !important;
+    top:auto !important;
+    z-index:auto !important;
+  }
+</style>
+
+
+<style id="v39-keep-bottom-controls-in-left-column">
+  /* Keep lower controls inside the left planisphere column only.
+     They must not slide under the right-side object/list column. */
+  .filter-card{
+    left:26px !important;
+    right:auto !important;
+    top:950px !important;
+    width:355px !important;
+    height:132px !important;
+    padding:14px 18px !important;
+  }
+
+  .legend{
+    left:401px !important;
+    right:auto !important;
+    top:950px !important;
+    width:405px !important;
+    min-height:132px !important;
+    padding:14px 16px !important;
+    display:flex !important;
+    align-items:center !important;
+    align-content:center !important;
+    justify-content:flex-start !important;
+    gap:8px 10px !important;
+    flex-wrap:wrap !important;
+  }
+
+  #visibilityFilters{
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+    flex-wrap:wrap !important;
+  }
+
+  #visibilityFilters .chip{
+    min-width:0 !important;
+    padding:7px 11px !important;
+    font-size:12px !important;
+    white-space:nowrap !important;
+  }
+
+  .legend button{
+    min-width:120px !important;
+    max-width:128px !important;
+    font-size:11px !important;
+    padding:5px 3px !important;
+    gap:7px !important;
+    white-space:nowrap !important;
+  }
+
+  .dot{
+    width:15px !important;
+    height:15px !important;
+    flex:0 0 15px !important;
+  }
+
+  body.has-selection .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:616px !important;
+    width:610px !important;
+    height:320px !important;
+  }
+
+  body.has-selection .legend,
+  body.no-selection .legend{
+    left:401px !important;
+    right:auto !important;
+    top:950px !important;
+    width:405px !important;
+  }
+
+  body.has-selection .filter-card,
+  body.no-selection .filter-card{
+    left:26px !important;
+    right:auto !important;
+    top:950px !important;
+    width:355px !important;
+  }
+
+  #viewport{ height:1120px !important; }
+  .app{ height:1120px !important; }
+</style>
+
+
+<style id="v40-equal-width-right-column">
+  /* When an object is selected, make the right column a clean stack
+     with equal widths for the object card and the visible-object list. */
+  body.has-selection .side-panel{
+    display:block !important;
+    right:26px !important;
+    left:auto !important;
+    top:188px !important;
+    width:720px !important;
+    height:338px !important;
+    padding:22px 26px 16px !important;
+  }
+
+  body.has-selection .panel-head{
+    grid-template-columns:1fr 180px !important;
+    gap:14px 18px !important;
+    align-items:start !important;
+  }
+  body.has-selection .panel-head h2{ font-size:34px !important; }
+  body.has-selection .panel-head h3{ font-size:22px !important; margin:8px 0 7px !important; }
+  body.has-selection .panel-head p{ font-size:15px !important; }
+  body.has-selection .object-img{
+    width:180px !important;
+    height:180px !important;
+    border-radius:24px !important;
+  }
+  body.has-selection .badges{ margin:14px 0 12px !important; }
+  body.has-selection .badge{ font-size:13px !important; padding:8px 14px !important; }
+  body.has-selection .facts{ margin-top:2px !important; }
+  body.has-selection .fact{
+    grid-template-columns:116px 1fr !important;
+    min-height:30px !important;
+    padding:5px 0 !important;
+    font-size:15px !important;
+  }
+  body.has-selection .fact strong{ font-size:15px !important; }
+
+  body.has-selection .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:542px !important;
+    width:720px !important;
+    height:394px !important;
+    padding:16px 18px !important;
+  }
+  body.has-selection .visible-list-head{ font-size:16px !important; margin-bottom:10px !important; }
+  body.has-selection .visible-list-head .count{ font-size:14px !important; }
+  body.has-selection .sky-extras{
+    gap:12px !important;
+    margin-bottom:12px !important;
+  }
+  body.has-selection .sky-extra{
+    min-width:0 !important;
+    flex:1 1 0 !important;
+    padding:10px 12px !important;
+    font-size:13px !important;
+  }
+  body.has-selection .visible-list-wrap{
+    height:278px !important;
+  }
+  body.has-selection .visible-list-table{ font-size:14px !important; }
+  body.has-selection .visible-list-table thead th{ padding:10px 12px !important; font-size:12px !important; }
+  body.has-selection .visible-list-table tbody td{ padding:9px 12px !important; }
+
+  /* Keep the no-selection start view width as the reference width. */
+  body.no-selection .visible-list-panel{
+    width:720px !important;
+  }
+</style>
+
+
+<style id="v41-fix-right-column-overlap">
+  /* Fix overlap between selected object card and visible objects list */
+  body.has-selection .side-panel{
+    right:26px !important;
+    left:auto !important;
+    top:188px !important;
+    width:720px !important;
+    height:388px !important;
+    padding:22px 26px 18px !important;
+    overflow:hidden !important;
+  }
+
+  body.has-selection .panel-head{
+    grid-template-columns:1fr 180px !important;
+    gap:14px 18px !important;
+  }
+
+  body.has-selection .badges{
+    margin:12px 0 10px !important;
+  }
+
+  body.has-selection .facts{
+    margin-top:2px !important;
+  }
+
+  body.has-selection .fact{
+    min-height:28px !important;
+    padding:4px 0 !important;
+  }
+
+  body.has-selection .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:596px !important;
+    width:720px !important;
+    height:340px !important;
+    padding:16px 18px !important;
+  }
+
+  body.has-selection .visible-list-wrap{
+    height:224px !important;
+  }
+
+  /* Keep the list title comfortably below the card */
+  body.has-selection .visible-list-head{
+    margin-top:0 !important;
+    margin-bottom:10px !important;
+  }
+</style>
+
+
+<style id="v42-astrosheeps-phrases">
+  .sheep-note{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:10px;
+    padding:10px 12px;
+    border:1px solid rgba(255,132,84,.18);
+    border-radius:14px;
+    background:rgba(255,132,84,.055);
+    color:rgba(255,242,232,.90);
+    font-size:13px;
+    line-height:1.35;
+  }
+
+  .sheep-note img{
+    width:34px;
+    height:34px;
+    border-radius:10px;
+    object-fit:cover;
+    flex:0 0 34px;
+  }
+
+  .sheep-note strong{
+    color:#ff8554;
+    font-weight:900;
+  }
+
+  .panel-empty{
+    position:relative;
+  }
+
+  .panel-empty::after{
+    content:"";
+    position:absolute;
+    right:8px;
+    bottom:8px;
+    width:78px;
+    height:78px;
+    background:url("assets/observatory_division_logo.png") center/cover no-repeat;
+    opacity:.16;
+    border-radius:18px;
+    pointer-events:none;
+  }
+
+  .panel-empty .kicker{
+    color:#ff8554 !important;
+  }
+
+  .empty{
+    color:rgba(255,236,220,.78) !important;
+    font-style:italic;
+  }
+
+  .empty::before{
+    content:"🐑 ";
+    font-style:normal;
+  }
+
+  .sky-extra{
+    position:relative;
+    overflow:hidden;
+  }
+
+  .sky-extra::after{
+    content:"";
+    position:absolute;
+    right:-14px;
+    bottom:-18px;
+    width:66px;
+    height:66px;
+    background:url("assets/logo_sheep.png") center/cover no-repeat;
+    opacity:.08;
+    border-radius:16px;
+    pointer-events:none;
+  }
+
+  .sky-extra .tagline{
+    display:block;
+    margin-top:3px;
+    color:rgba(255,236,220,.68);
+    font-size:11px;
+  }
+
+  body.has-selection .side-panel{
+    height:420px !important;
+  }
+
+  body.has-selection .visible-list-panel{
+    top:612px !important;
+    height:324px !important;
+  }
+
+  body.has-selection .visible-list-wrap{
+    height:208px !important;
+  }
+
+  body.has-selection .sheep-note{
+    margin-top:8px;
+  }
+</style>
+
+
+<style id="v43-mission-note-fit-fix">
+  /* Compact the AstroSheeps mission note so it fits inside the card */
+  body.has-selection .sheep-note{
+    margin-top:6px !important;
+    padding:7px 10px !important;
+    font-size:12px !important;
+    line-height:1.25 !important;
+    gap:8px !important;
+  }
+
+  body.has-selection .sheep-note img{
+    width:28px !important;
+    height:28px !important;
+    border-radius:8px !important;
+    flex:0 0 28px !important;
+  }
+
+  /* Give the object card just enough room, then move the list down cleanly */
+  body.has-selection .side-panel{
+    height:438px !important;
+    overflow:hidden !important;
+  }
+
+  body.has-selection .visible-list-panel{
+    top:642px !important;
+    height:294px !important;
+  }
+
+  body.has-selection .visible-list-wrap{
+    height:178px !important;
+  }
+
+  /* Slightly reduce card internals so nothing clips */
+  body.has-selection .badges{
+    margin:10px 0 8px !important;
+  }
+
+  body.has-selection .fact{
+    min-height:27px !important;
+    padding:3px 0 !important;
+  }
+</style>
+
+
+<style id="v44-long-full-width-controls-row">
+  /* Bottom control row: two long horizontal panels across the page */
+  .filter-card,
+  body.has-selection .filter-card,
+  body.no-selection .filter-card{
+    left:26px !important;
+    right:auto !important;
+    top:962px !important;
+    width:700px !important;
+    height:132px !important;
+    padding:14px 18px !important;
+  }
+
+  .legend,
+  body.has-selection .legend,
+  body.no-selection .legend{
+    left:746px !important;
+    right:auto !important;
+    top:962px !important;
+    width:764px !important;
+    min-height:132px !important;
+    padding:14px 18px !important;
+    display:flex !important;
+    align-items:center !important;
+    align-content:center !important;
+    justify-content:flex-start !important;
+    gap:10px 16px !important;
+    flex-wrap:wrap !important;
+  }
+
+  .legend button{
+    min-width:165px !important;
+    max-width:none !important;
+    font-size:12px !important;
+    padding:5px 4px !important;
+    gap:8px !important;
+    white-space:nowrap !important;
+  }
+
+  .dot{
+    width:16px !important;
+    height:16px !important;
+    flex:0 0 16px !important;
+  }
+
+  .filter-row{ font-size:14px !important; }
+  .filter-row strong{ font-size:17px !important; }
+  .range{ margin:8px 0 10px !important; }
+
+  #visibilityFilters{
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    flex-wrap:nowrap !important;
+  }
+  #visibilityFilters .chip{
+    min-width:0 !important;
+    padding:7px 14px !important;
+    font-size:12px !important;
+    white-space:nowrap !important;
+  }
+
+  /* Ensure enough page height for the long bottom row */
+  #viewport{ height:1128px !important; }
+  .app{ height:1128px !important; }
+</style>
+
+
+<style id="v45-fill-gap-and-fit-last-row">
+  /* No-selection state: make the visible-object list taller so the last row fits,
+     and pull the bottom controls upward to remove the large empty gap. */
+  body.no-selection .visible-list-panel{
+    right:26px !important;
+    left:auto !important;
+    top:188px !important;
+    width:720px !important;
+    height:730px !important;
+    padding:16px 18px !important;
+  }
+
+  body.no-selection .visible-list-wrap{
+    height:678px !important;
+  }
+
+  body.no-selection .visible-list-table thead th{
+    padding:10px 12px !important;
+  }
+
+  body.no-selection .visible-list-table tbody td{
+    padding:8px 12px !important;
+  }
+
+  /* Long bottom control row sits closer to the list, removing the dead space. */
+  .filter-card,
+  body.has-selection .filter-card,
+  body.no-selection .filter-card{
+    top:944px !important;
+  }
+
+  .legend,
+  body.has-selection .legend,
+  body.no-selection .legend{
+    top:944px !important;
+  }
+
+  #viewport{ height:1110px !important; }
+  .app{ height:1110px !important; }
+</style>
+
+
+<style id="v46-responsive-tablet-mobile">
+  html,body{overflow-x:hidden !important;}
+
+  /* ---------- TABLET ---------- */
+  @media (max-width: 1100px){
+    #viewport,
+    .app{
+      width:100% !important;
+      min-width:0 !important;
+      height:2000px !important;
+    }
+
+    .brand{
+      left:16px !important;
+      top:16px !important;
+      width:calc(100% - 32px) !important;
+      z-index:40 !important;
+    }
+    .brand img{width:74px !important;height:74px !important;border-radius:22px !important;}
+    .brand h1{font-size:38px !important;line-height:1 !important;}
+    .brand p{font-size:18px !important;}
+
+    .top-controls{
+      left:16px !important;
+      right:16px !important;
+      width:auto !important;
+      top:106px !important;
+      height:auto !important;
+      padding:14px !important;
+      z-index:35 !important;
+    }
+    .ctrl-row{display:flex !important;flex-wrap:wrap !important;gap:10px !important;align-items:center !important;}
+    .ctrl-row + .ctrl-row{margin-top:10px !important;}
+    .top-label{width:100% !important;display:block !important;margin-bottom:2px !important;}
+    .top-input{flex:1 1 290px !important;min-width:240px !important;}
+    .top-button{flex:0 0 auto !important;min-width:46px !important;}
+    .top-select{flex:0 0 116px !important;}
+    .top-button.wide{min-width:148px !important;}
+    .toggle-line{display:flex !important;flex-wrap:wrap !important;gap:10px 18px !important;}
+
+    .sky{
+      left:50% !important;
+      transform:translateX(-50%) !important;
+      top:292px !important;
+      width:min(calc(100vw - 32px), 720px) !important;
+      height:min(calc(100vw - 32px), 720px) !important;
+    }
+
+    body.no-selection .visible-list-panel{
+      left:16px !important;
+      right:16px !important;
+      width:auto !important;
+      top:1030px !important;
+      height:420px !important;
+      padding:16px !important;
+    }
+    body.no-selection .visible-list-wrap{height:322px !important;}
+
+    body.has-selection .side-panel{
+      left:16px !important;
+      right:16px !important;
+      width:auto !important;
+      top:1030px !important;
+      height:356px !important;
+      padding:18px 20px 14px !important;
+    }
+    body.has-selection .visible-list-panel{
+      left:16px !important;
+      right:16px !important;
+      width:auto !important;
+      top:1402px !important;
+      height:404px !important;
+      padding:16px !important;
+    }
+    body.has-selection .visible-list-wrap{height:286px !important;}
+
+    .filter-card,
+    body.has-selection .filter-card,
+    body.no-selection .filter-card{
+      left:16px !important;
+      right:16px !important;
+      width:auto !important;
+      top:1824px !important;
+      height:138px !important;
+      padding:14px 16px !important;
+    }
+    .legend,
+    body.has-selection .legend,
+    body.no-selection .legend{
+      left:16px !important;
+      right:16px !important;
+      width:auto !important;
+      top:1978px !important;
+      min-height:156px !important;
+      padding:14px 16px !important;
+      gap:10px 14px !important;
+    }
+    .legend button{min-width:152px !important;}
+  }
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width: 760px){
+    #viewport,
+    .app{
+      width:100% !important;
+      height:2260px !important;
+    }
+
+    .brand{
+      left:12px !important;
+      top:12px !important;
+      width:calc(100% - 24px) !important;
+      display:flex !important;
+      align-items:center !important;
+      gap:10px !important;
+    }
+    .brand img{width:54px !important;height:54px !important;border-radius:16px !important;}
+    .brand h1{font-size:26px !important;}
+    .brand p{font-size:13px !important;letter-spacing:.18em !important;}
+
+    .top-controls{
+      left:12px !important;
+      right:12px !important;
+      width:auto !important;
+      top:82px !important;
+      padding:12px !important;
+      border-radius:20px !important;
+    }
+    .top-controls .ctrl-row{gap:8px !important;}
+    .top-input,
+    .top-select,
+    .top-button.wide,
+    .top-button,
+    .top-select.step{
+      flex:1 1 calc(50% - 8px) !important;
+      min-width:0 !important;
+    }
+    #datetime{flex-basis:100% !important;}
+    #prevStepBtn,#nextStepBtn{flex:0 0 calc(25% - 6px) !important;}
+    #timeStep{flex:1 1 calc(50% - 6px) !important;}
+    #playBtn,#nowBtn,#helpBtn{flex:1 1 calc(33.333% - 6px) !important;}
+    #useLocationBtn{flex:1 1 100% !important;}
+    .toggle-line{display:grid !important;grid-template-columns:1fr 1fr !important;gap:8px 14px !important;}
+    .toggle-line label{font-size:13px !important;}
+
+    .sky{
+      top:384px !important;
+      left:50% !important;
+      transform:translateX(-50%) !important;
+      width:calc(100vw - 24px) !important;
+      height:calc(100vw - 24px) !important;
+      max-width:420px !important;
+      max-height:420px !important;
+    }
+
+    body.no-selection .visible-list-panel{
+      left:12px !important;
+      right:12px !important;
+      width:auto !important;
+      top:824px !important;
+      height:420px !important;
+      padding:14px !important;
+    }
+    body.no-selection .visible-list-wrap{height:320px !important;}
+
+    body.has-selection .side-panel{
+      left:12px !important;
+      right:12px !important;
+      width:auto !important;
+      top:824px !important;
+      height:430px !important;
+      padding:16px !important;
+    }
+    body.has-selection .panel-head{grid-template-columns:1fr 118px !important;gap:12px !important;}
+    body.has-selection .panel-head h2{font-size:28px !important;}
+    body.has-selection .panel-head h3{font-size:18px !important;}
+    body.has-selection .panel-head p{font-size:13px !important;}
+    body.has-selection .object-img{width:118px !important;height:118px !important;border-radius:18px !important;}
+    body.has-selection .badge{font-size:11px !important;padding:7px 11px !important;}
+    body.has-selection .fact{grid-template-columns:100px 1fr !important;font-size:13px !important;min-height:24px !important;}
+    body.has-selection .fact strong{font-size:13px !important;}
+    body.has-selection .visible-list-panel{
+      left:12px !important;
+      right:12px !important;
+      width:auto !important;
+      top:1270px !important;
+      height:406px !important;
+      padding:14px !important;
+    }
+    body.has-selection .visible-list-wrap{height:284px !important;}
+
+    .visible-list-head{font-size:15px !important;}
+    .visible-list-head .count{font-size:13px !important;}
+    .sky-extras{display:block !important;}
+    .sky-extra{margin-bottom:8px !important;min-width:0 !important;}
+    .visible-list-table{font-size:12px !important;}
+    .visible-list-table thead th{font-size:11px !important;padding:8px 9px !important;}
+    .visible-list-table tbody td{padding:8px 9px !important;}
+
+    .filter-card,
+    body.has-selection .filter-card,
+    body.no-selection .filter-card{
+      left:12px !important;
+      right:12px !important;
+      width:auto !important;
+      top:1694px !important;
+      height:148px !important;
+      padding:14px !important;
+    }
+    #visibilityFilters{display:flex !important;flex-wrap:wrap !important;gap:8px !important;}
+    #visibilityFilters .chip{flex:1 1 calc(33.333% - 6px) !important;min-width:0 !important;padding:8px 10px !important;font-size:12px !important;}
+
+    .legend,
+    body.has-selection .legend,
+    body.no-selection .legend{
+      left:12px !important;
+      right:12px !important;
+      width:auto !important;
+      top:1858px !important;
+      min-height:206px !important;
+      padding:14px !important;
+      display:grid !important;
+      grid-template-columns:1fr 1fr !important;
+      gap:10px 12px !important;
+    }
+    .legend button{min-width:0 !important;width:100% !important;justify-content:flex-start !important;font-size:12px !important;}
+  }
+</style>
+
+
+<style id="v47-responsive-rebuild">
+  html,body{overflow-x:hidden !important;}
+
+  /* TRUE responsive layout: switch from absolute desktop placement
+     to a normal stacked flow for tablet and mobile. */
+  @media (max-width: 1100px){
+    #viewport,
+    .app{
+      position:relative !important;
+      width:100% !important;
+      min-width:0 !important;
+      height:auto !important;
+      min-height:0 !important;
+    }
+
+    .app{
+      display:flex !important;
+      flex-direction:column !important;
+      gap:14px !important;
+      padding:14px !important;
+      box-sizing:border-box !important;
+    }
+
+    .brand,
+    .top-controls,
+    .rounds,
+    .sky,
+    .visible-list-panel,
+    .side-panel,
+    .filter-card,
+    .legend{
+      position:relative !important;
+      left:auto !important;
+      right:auto !important;
+      top:auto !important;
+      bottom:auto !important;
+      transform:none !important;
+      margin:0 !important;
+      width:100% !important;
+      max-width:none !important;
+      box-sizing:border-box !important;
+    }
+
+    .brand{
+      order:1 !important;
+      display:flex !important;
+      align-items:center !important;
+      gap:12px !important;
+      width:100% !important;
+    }
+    .brand img{
+      width:72px !important;
+      height:72px !important;
+      border-radius:20px !important;
+      flex:0 0 72px !important;
+    }
+    .brand h1{font-size:38px !important; line-height:1 !important;}
+    .brand p{font-size:16px !important; letter-spacing:.22em !important;}
+
+    .top-controls{
+      order:2 !important;
+      padding:14px !important;
+      border-radius:22px !important;
+      height:auto !important;
+      display:block !important;
+    }
+    .ctrl-row{
+      display:flex !important;
+      flex-wrap:wrap !important;
+      align-items:center !important;
+      gap:8px !important;
+    }
+    .ctrl-row + .ctrl-row{ margin-top:10px !important; }
+    .top-label{
+      display:block !important;
+      width:100% !important;
+      margin:0 0 2px !important;
+    }
+    .top-input,
+    .top-select,
+    .top-button{
+      flex:1 1 150px !important;
+      min-width:120px !important;
+      width:auto !important;
+    }
+    #datetime{ flex:1 1 320px !important; }
+    #prevStepBtn,
+    #nextStepBtn{ flex:0 0 56px !important; min-width:56px !important; }
+    #timeStep{ flex:0 0 120px !important; }
+    #nowBtn{ flex:0 0 120px !important; }
+    #latInput,
+    #lonInput{ flex:1 1 180px !important; }
+    #useLocationBtn,
+    #messierCatalogBtn{ flex:1 1 220px !important; }
+
+    .toggle-row{
+      display:flex !important;
+      flex-wrap:wrap !important;
+      gap:8px 16px !important;
+      margin-top:12px !important;
+    }
+    .toggle-row label{font-size:14px !important;}
+
+    .rounds{
+      order:3 !important;
+      display:flex !important;
+      justify-content:flex-end !important;
+      gap:10px !important;
+      width:100% !important;
+    }
+    .round{
+      position:relative !important;
+      inset:auto !important;
+      width:48px !important;
+      height:48px !important;
+      flex:0 0 48px !important;
+    }
+
+    .sky{
+      order:4 !important;
+      align-self:center !important;
+      width:min(100%, 760px) !important;
+      max-width:760px !important;
+      height:auto !important;
+      aspect-ratio:1 / 1 !important;
+      display:block !important;
+    }
+    .sky svg{width:100% !important; height:100% !important; display:block !important;}
+
+    body.has-selection .side-panel{
+      display:block !important;
+      order:5 !important;
+      height:auto !important;
+      min-height:0 !important;
+      padding:18px !important;
+      overflow:visible !important;
+    }
+    body.no-selection .side-panel{ display:none !important; }
+
+    body.has-selection .panel-head{
+      grid-template-columns:1fr 170px !important;
+      gap:12px 16px !important;
+    }
+    body.has-selection .panel-head h2{font-size:34px !important;}
+    body.has-selection .panel-head h3{font-size:22px !important;}
+    body.has-selection .panel-head p{font-size:15px !important;}
+    body.has-selection .object-img{width:170px !important; height:170px !important; border-radius:22px !important;}
+
+    .visible-list-panel{
+      order:6 !important;
+      height:auto !important;
+      min-height:0 !important;
+      padding:16px !important;
+    }
+    .visible-list-wrap{
+      height:auto !important;
+      max-height:380px !important;
+    }
+    .visible-list-table thead th{ position:static !important; }
+
+    .filter-card{
+      order:7 !important;
+      height:auto !important;
+      padding:14px 16px !important;
+    }
+    #visibilityFilters{
+      display:flex !important;
+      flex-wrap:wrap !important;
+      gap:8px !important;
+    }
+    #visibilityFilters .chip{
+      flex:1 1 160px !important;
+      min-width:0 !important;
+    }
+
+    .legend{
+      order:8 !important;
+      min-height:0 !important;
+      padding:14px 16px !important;
+      display:grid !important;
+      grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+      gap:10px 14px !important;
+    }
+    .legend button{
+      min-width:0 !important;
+      width:100% !important;
+      justify-content:flex-start !important;
+    }
+  }
+
+  @media (max-width: 760px){
+    .app{ padding:12px !important; gap:12px !important; }
+    .brand img{ width:56px !important; height:56px !important; border-radius:16px !important; flex-basis:56px !important; }
+    .brand h1{ font-size:28px !important; }
+    .brand p{ font-size:12px !important; letter-spacing:.18em !important; }
+
+    .top-controls{ padding:12px !important; }
+    .top-input,
+    .top-select,
+    .top-button{ flex:1 1 calc(50% - 8px) !important; min-width:0 !important; }
+    #datetime{ flex:1 1 100% !important; }
+    #prevStepBtn,
+    #nextStepBtn{ flex:0 0 calc(20% - 6px) !important; min-width:0 !important; }
+    #timeStep{ flex:1 1 calc(30% - 6px) !important; min-width:0 !important; }
+    #nowBtn{ flex:1 1 calc(30% - 6px) !important; min-width:0 !important; }
+    #latInput,
+    #lonInput,
+    #useLocationBtn,
+    #messierCatalogBtn{ flex:1 1 100% !important; }
+    .toggle-row{ display:grid !important; grid-template-columns:1fr 1fr !important; gap:8px 12px !important; }
+    .toggle-row label{ font-size:13px !important; }
+
+    .rounds{ justify-content:flex-start !important; }
+    .round{ width:44px !important; height:44px !important; flex-basis:44px !important; }
+
+    .sky{ width:100% !important; max-width:420px !important; }
+
+    body.has-selection .panel-head{ grid-template-columns:1fr 120px !important; }
+    body.has-selection .panel-head h2{font-size:28px !important;}
+    body.has-selection .panel-head h3{font-size:18px !important; margin:6px 0 !important;}
+    body.has-selection .panel-head p{font-size:13px !important;}
+    body.has-selection .object-img{ width:120px !important; height:120px !important; border-radius:18px !important; }
+    body.has-selection .badge{ font-size:11px !important; padding:7px 11px !important; }
+    body.has-selection .fact{ grid-template-columns:92px 1fr !important; font-size:13px !important; min-height:24px !important; }
+    body.has-selection .fact strong{ font-size:13px !important; }
+    body.has-selection .sheep-note{ font-size:12px !important; }
+
+    .sky-extras{ display:block !important; }
+    .sky-extra{ margin-bottom:8px !important; }
+    .visible-list-wrap{ max-height:320px !important; }
+    .visible-list-table{ font-size:12px !important; }
+    .visible-list-table thead th{ font-size:11px !important; padding:8px 9px !important; }
+    .visible-list-table tbody td{ padding:8px 9px !important; }
+
+    #visibilityFilters .chip{ flex:1 1 calc(33.333% - 6px) !important; font-size:12px !important; }
+
+    .legend{ grid-template-columns:1fr 1fr !important; }
+    .legend button{ font-size:12px !important; }
+  }
+</style>
+
+
+<style id="v48-real-responsive-flow-final">
+  @media (max-width: 1100px){
+    html, body{
+      width:100% !important;
+      min-height:100% !important;
+      height:auto !important;
+      overflow-x:hidden !important;
+      overflow-y:auto !important;
+    }
+
+    #viewport{
+      position:relative !important;
+      left:0 !important;
+      top:0 !important;
+      width:100% !important;
+      height:auto !important;
+      min-height:100vh !important;
+      transform:none !important;
+      transform-origin:initial !important;
+    }
+
+    .app{
+      position:relative !important;
+      width:100% !important;
+      height:auto !important;
+      min-height:100vh !important;
+      display:grid !important;
+      grid-template-columns:minmax(0, 1fr) !important;
+      gap:14px !important;
+      padding:14px !important;
+      box-sizing:border-box !important;
+    }
+
+    .brand,
+    .top-controls,
+    .rounds,
+    .sky,
+    .side-panel,
+    .visible-list-panel,
+    .filter-card,
+    .legend{
+      position:relative !important;
+      left:auto !important;
+      right:auto !important;
+      top:auto !important;
+      bottom:auto !important;
+      width:100% !important;
+      max-width:100% !important;
+      height:auto !important;
+      transform:none !important;
+      margin:0 !important;
+      box-sizing:border-box !important;
+    }
+
+    .brand{
+      display:flex !important;
+      align-items:center !important;
+      gap:12px !important;
+      order:1 !important;
+    }
+    .brand img{
+      width:76px !important;
+      height:76px !important;
+      flex:0 0 76px !important;
+      border-radius:20px !important;
+    }
+    .brand h1{
+      font-size:38px !important;
+      line-height:1 !important;
+      margin:0 !important;
+    }
+    .brand p{
+      font-size:16px !important;
+      margin-top:6px !important;
+      letter-spacing:.22em !important;
+    }
+
+    .top-controls{
+      order:2 !important;
+      padding:14px !important;
+      border-radius:22px !important;
+      display:flex !important;
+      flex-direction:column !important;
+      gap:10px !important;
+    }
+
+    .top-controls .ctrl-row{
+      display:grid !important;
+      grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
+      gap:8px !important;
+      align-items:center !important;
+    }
+
+    .top-controls .top-label{
+      grid-column:1 / -1 !important;
+      width:auto !important;
+      min-width:0 !important;
+      margin:0 !important;
+      font-size:13px !important;
+    }
+
+    .top-controls #datetime{
+      grid-column:1 / -1 !important;
+      width:100% !important;
+      min-width:0 !important;
+    }
+
+    .top-controls #prevStepBtn,
+    .top-controls #nextStepBtn,
+    .top-controls #timeStep,
+    .top-controls #nowBtn{
+      width:100% !important;
+      min-width:0 !important;
+    }
+
+    .top-controls #latInput,
+    .top-controls #lonInput{
+      grid-column:span 2 !important;
+      width:100% !important;
+      min-width:0 !important;
+    }
+
+    .top-controls #useLocationBtn,
+    .top-controls #messierCatalogBtn{
+      grid-column:span 2 !important;
+      width:100% !important;
+      min-width:0 !important;
+    }
+
+    .toggle-row{
+      display:grid !important;
+      grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+      gap:8px 14px !important;
+    }
+
+    .rounds{
+      order:3 !important;
+      display:flex !important;
+      gap:10px !important;
+      justify-content:flex-start !important;
+      padding:0 !important;
+    }
+    .round{
+      width:46px !important;
+      height:46px !important;
+      flex:0 0 46px !important;
+    }
+
+    .sky{
+      order:4 !important;
+      justify-self:center !important;
+      width:min(100%, 740px) !important;
+      aspect-ratio:1 / 1 !important;
+      max-height:none !important;
+    }
+    .sky svg{
+      width:100% !important;
+      height:100% !important;
+      display:block !important;
+    }
+
+    body.has-selection .side-panel{
+      display:block !important;
+      order:5 !important;
+      min-height:0 !important;
+      padding:18px !important;
+      overflow:visible !important;
+    }
+    body.no-selection .side-panel{
+      display:none !important;
+    }
+
+    body.has-selection .panel-head{
+      grid-template-columns:1fr 170px !important;
+      gap:12px 16px !important;
+      align-items:start !important;
+    }
+    body.has-selection .object-img{
+      width:170px !important;
+      height:170px !important;
+      border-radius:22px !important;
+    }
+
+    .visible-list-panel{
+      order:6 !important;
+      padding:16px !important;
+      min-height:0 !important;
+    }
+    .visible-list-wrap{
+      height:auto !important;
+      max-height:420px !important;
+      overflow:auto !important;
+    }
+
+    .filter-card{
+      order:7 !important;
+      padding:14px 16px !important;
+    }
+    #visibilityFilters{
+      display:grid !important;
+      grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+      gap:8px !important;
+    }
+    #visibilityFilters .chip{
+      min-width:0 !important;
+      width:100% !important;
+      padding:8px 10px !important;
+    }
+
+    .legend{
+      order:8 !important;
+      display:grid !important;
+      grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+      gap:10px 14px !important;
+      padding:14px 16px !important;
+      min-height:0 !important;
+    }
+    .legend button{
+      width:100% !important;
+      min-width:0 !important;
+      max-width:none !important;
+      justify-content:flex-start !important;
+    }
+  }
+
+  @media (max-width: 640px){
+    .app{
+      gap:12px !important;
+      padding:12px !important;
+    }
+
+    .brand img{
+      width:58px !important;
+      height:58px !important;
+      flex-basis:58px !important;
+      border-radius:16px !important;
+    }
+    .brand h1{
+      font-size:28px !important;
+    }
+    .brand p{
+      font-size:12px !important;
+      letter-spacing:.18em !important;
+    }
+
+    .top-controls .ctrl-row{
+      grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+    }
+    .top-controls #prevStepBtn,
+    .top-controls #nextStepBtn,
+    .top-controls #timeStep,
+    .top-controls #nowBtn,
+    .top-controls #latInput,
+    .top-controls #lonInput,
+    .top-controls #useLocationBtn,
+    .top-controls #messierCatalogBtn{
+      grid-column:span 1 !important;
+    }
+    .top-controls #useLocationBtn,
+    .top-controls #messierCatalogBtn{
+      grid-column:1 / -1 !important;
+    }
+
+    .toggle-row{
+      grid-template-columns:1fr 1fr !important;
+    }
+
+    .sky{
+      width:100% !important;
+      max-width:430px !important;
+    }
+
+    body.has-selection .panel-head{
+      grid-template-columns:1fr 116px !important;
+      gap:10px !important;
+    }
+    body.has-selection .panel-head h2{
+      font-size:28px !important;
+    }
+    body.has-selection .panel-head h3{
+      font-size:18px !important;
+    }
+    body.has-selection .object-img{
+      width:116px !important;
+      height:116px !important;
+      border-radius:18px !important;
+    }
+
+    .sky-extras{
+      display:block !important;
+    }
+    .sky-extra{
+      margin-bottom:8px !important;
+    }
+
+    .visible-list-wrap{
+      max-height:330px !important;
+    }
+
+    .visible-list-table{
+      font-size:12px !important;
+    }
+    .visible-list-table th,
+    .visible-list-table td{
+      padding:8px 9px !important;
+    }
+
+    #visibilityFilters{
+      grid-template-columns:1fr !important;
+    }
+
+    .legend{
+      grid-template-columns:1fr 1fr !important;
+    }
+  }
+</style>
+
+
+<style id="v49-responsive-spacing-fix">
+  /* Strong override: use normal document flow on tablet/mobile,
+     eliminating giant vertical gaps from old absolute desktop layout. */
+  @media (max-width: 1100px){
+    html, body {
+      width:100% !important;
+      min-height:100% !important;
+      height:auto !important;
+      overflow-x:hidden !important;
+      overflow-y:auto !important;
+    }
+
+    #viewport{
+      position:static !important;
+      width:100% !important;
+      height:auto !important;
+      min-height:0 !important;
+      transform:none !important;
+      left:auto !important;
+      top:auto !important;
+      margin:0 !important;
+    }
+
+    .app{
+      position:static !important;
+      width:100% !important;
+      height:auto !important;
+      min-height:0 !important;
+      display:flex !important;
+      flex-direction:column !important;
+      align-items:stretch !important;
+      gap:12px !important;
+      padding:12px !important;
+      box-sizing:border-box !important;
+    }
+
+    .brand,
+    .top-controls,
+    .rounds,
+    .sky,
+    .side-panel,
+    .visible-list-panel,
+    .filter-card,
+    .legend {
+      position:static !important;
+      inset:auto !important;
+      left:auto !important;
+      right:auto !important;
+      top:auto !important;
+      bottom:auto !important;
+      transform:none !important;
+      width:100% !important;
+      max-width:100% !important;
+      height:auto !important;
+      min-height:0 !important;
+      margin:0 !important;
+      box-sizing:border-box !important;
+      align-self:stretch !important;
+      order:initial !important;
+    }
+
+    .brand {
+      display:flex !important;
+      align-items:center !important;
+      gap:12px !important;
+    }
+    .brand img {
+      width:70px !important;
+      height:70px !important;
+      flex:0 0 70px !important;
+      border-radius:20px !important;
+    }
+    .brand h1 { font-size:36px !important; line-height:1 !important; margin:0 !important; }
+    .brand p { font-size:15px !important; margin-top:4px !important; letter-spacing:.2em !important; }
+
+    .top-controls {
+      padding:14px !important;
+      border-radius:22px !important;
+      display:flex !important;
+      flex-direction:column !important;
+      gap:10px !important;
+    }
+    .top-controls .ctrl-row{
+      display:grid !important;
+      grid-template-columns:repeat(4, minmax(0, 1fr)) !important;
+      gap:8px !important;
+      align-items:center !important;
+    }
+    .top-controls .top-label{
+      grid-column:1 / -1 !important;
+      width:auto !important;
+      margin:0 !important;
+      min-width:0 !important;
+    }
+    .top-controls #datetime{ grid-column:1 / -1 !important; width:100% !important; }
+    .top-controls #prevStepBtn,
+    .top-controls #nextStepBtn,
+    .top-controls #timeStep,
+    .top-controls #nowBtn{ width:100% !important; min-width:0 !important; }
+    .top-controls #latInput,
+    .top-controls #lonInput,
+    .top-controls #useLocationBtn,
+    .top-controls #messierCatalogBtn{ grid-column:span 2 !important; width:100% !important; min-width:0 !important; }
+    .toggle-row{
+      display:grid !important;
+      grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+      gap:8px 14px !important;
+      margin-top:2px !important;
+    }
+
+    .rounds{
+      display:flex !important;
+      justify-content:flex-start !important;
+      gap:10px !important;
+      padding:0 !important;
+    }
+    .round{
+      position:static !important;
+      width:44px !important;
+      height:44px !important;
+      flex:0 0 44px !important;
+      inset:auto !important;
+      margin:0 !important;
+    }
+
+    .sky{
+      width:min(100%, 760px) !important;
+      aspect-ratio:1 / 1 !important;
+      max-width:760px !important;
+      height:auto !important;
+      align-self:center !important;
+      display:block !important;
+    }
+    .sky svg{ width:100% !important; height:100% !important; display:block !important; }
+
+    body.no-selection .side-panel{ display:none !important; }
+    body.has-selection .side-panel{
+      display:block !important;
+      padding:18px !important;
+      overflow:visible !important;
+    }
+    body.has-selection .panel-head{ grid-template-columns:1fr 170px !important; gap:12px 16px !important; }
+    body.has-selection .object-img{ width:170px !important; height:170px !important; border-radius:22px !important; }
+
+    .visible-list-panel{ padding:16px !important; }
+    .visible-list-wrap{
+      height:auto !important;
+      max-height:420px !important;
+      overflow:auto !important;
+    }
+
+    .filter-card{ padding:14px 16px !important; }
+    #visibilityFilters{ display:grid !important; grid-template-columns:repeat(3, minmax(0,1fr)) !important; gap:8px !important; }
+    #visibilityFilters .chip{ width:100% !important; min-width:0 !important; }
+
+    .legend{
+      display:grid !important;
+      grid-template-columns:repeat(3, minmax(0,1fr)) !important;
+      gap:10px 14px !important;
+      padding:14px 16px !important;
+    }
+    .legend button{ width:100% !important; min-width:0 !important; max-width:none !important; justify-content:flex-start !important; }
+  }
+
+  @media (max-width: 640px){
+    .app{ padding:10px !important; gap:10px !important; }
+    .brand img{ width:56px !important; height:56px !important; flex-basis:56px !important; border-radius:16px !important; }
+    .brand h1{ font-size:28px !important; }
+    .brand p{ font-size:12px !important; letter-spacing:.16em !important; }
+
+    .top-controls{ padding:12px !important; }
+    .top-controls .ctrl-row{ grid-template-columns:repeat(2, minmax(0,1fr)) !important; }
+    .top-controls #prevStepBtn,
+    .top-controls #nextStepBtn,
+    .top-controls #timeStep,
+    .top-controls #nowBtn,
+    .top-controls #latInput,
+    .top-controls #lonInput{ grid-column:span 1 !important; }
+    .top-controls #useLocationBtn,
+    .top-controls #messierCatalogBtn,
+    .top-controls #datetime{ grid-column:1 / -1 !important; }
+
+    .toggle-row{ grid-template-columns:1fr 1fr !important; }
+
+    .sky{ width:100% !important; max-width:430px !important; }
+
+    body.has-selection .panel-head{ grid-template-columns:1fr 116px !important; gap:10px !important; }
+    body.has-selection .panel-head h2{ font-size:28px !important; }
+    body.has-selection .panel-head h3{ font-size:18px !important; }
+    body.has-selection .object-img{ width:116px !important; height:116px !important; border-radius:18px !important; }
+
+    .sky-extras{ display:block !important; }
+    .sky-extra{ margin-bottom:8px !important; }
+    .visible-list-wrap{ max-height:330px !important; }
+    .visible-list-table{ font-size:12px !important; }
+    .visible-list-table th, .visible-list-table td{ padding:8px 9px !important; }
+
+    #visibilityFilters{ grid-template-columns:1fr !important; }
+    .legend{ grid-template-columns:1fr 1fr !important; }
+  }
+</style>
+
+
+<style id="v50-moon-phase-icon">
+  .moon-marker .glow{ filter:blur(8px); opacity:.42 !important; }
+  .moon-marker .backing{ fill:rgba(10,16,32,.88); stroke:#ffcf7a; stroke-width:1.6; }
+  .moon-marker .icon{ font-size:18px; filter:drop-shadow(0 0 5px rgba(255,220,140,.35)); }
+  .moon-marker text{ fill:#ffe6c2; font-size:13px; font-weight:900; }
+</style>
+
+</head>
+<body>
+<div id="viewport"><div class="app">
+  <div class="brand"><img src="assets/observatory_division_logo.png" alt="AstroSheeps logo"><div><h1>ASTRO<span class="brand-orange">SHEEPS</span></h1><p>PLANISPHERE</p></div></div>
+  <div class="top-controls">
+    <div class="ctrl-row">
+      <span class="top-label">Date and time</span>
+      <input class="top-input" id="datetime" type="datetime-local">
+      <button class="top-button" id="prevStepBtn">&lt;</button>
+      <button class="top-button" id="nextStepBtn">&gt;</button>
+      <select class="top-select step" id="timeStep">
+        <option value="minute">minute</option>
+        <option value="hour" selected>hour</option>
+        <option value="day">day</option>
+      </select>
+      <button class="top-button" id="nowBtn">Now</button>
+    </div>
+    <div class="ctrl-row">
+      <span class="top-label">North latitude</span>
+      <input class="top-input coord" id="latInput" type="number" step="0.0001" value="59.4370">
+      <span class="top-label" style="min-width:auto">East longitude</span>
+      <input class="top-input coord" id="lonInput" type="number" step="0.0001" value="24.7536">
+      <button class="top-button" id="useLocationBtn">Use My Location</button><button class="top-button" id="messierCatalogBtn">Messier Catalog</button>
+    </div>
+    <div class="toggle-row">
+      <label><input id="toggleDSO" type="checkbox" checked> DSOs</label>
+      <label><input id="toggleStarNames" type="checkbox"> Star names</label>
+      <label><input id="toggleConstLines" type="checkbox" checked> Constellation lines</label>
+      <label><input id="toggleConstLabels" type="checkbox"> Constellation labels</label>
+    </div>
+  </div>
+  <div class="rounds"><button class="round" id="playBtn">▷</button><button class="round" id="catalogBtn">☰</button><button class="round">⚙</button><button class="round">?</button></div>
+  <section class="sky"><svg id="skySvg" viewBox="0 0 820 820" aria-label="Circular planisphere"></svg></section>
+  <section class="visible-list-panel">
+    <div class="visible-list-head"><span>Visible Messier Objects</span><span class="count" id="visibleMessierCount"></span></div>
+    <div class="sky-extras"><div class="sky-extra" id="moonSummary">Moon —</div><div class="sky-extra" id="mwSummary">Milky Way —</div></div>
+    <div class="visible-list-wrap">
+      <table class="visible-list-table">
+        <thead><tr><th>Object</th><th>Name</th><th>Sector</th><th>Altitude</th></tr></thead>
+        <tbody id="visibleMessierBody"></tbody>
+      </table>
+    </div>
+  </section>
+  <aside class="side-panel" id="panel"></aside>
+  <div class="filter-card">
+    <div class="filter-row"><span>Min Altitude</span><strong><span id="minAltLabel">30</span>°</strong></div>
+    <input class="range" id="minAlt" type="range" min="0" max="80" step="1" value="30">
+    <div class="filter-row" style="margin-bottom:10px"><span>Display mode</span></div>
+    <div class="chips" id="visibilityFilters"><button class="chip active" data-mode="highlight">Highlight</button><button class="chip" data-mode="onlyAbove">Only above</button><button class="chip" data-mode="all">All visible</button></div>
+  </div>
+  <div class="legend" id="typeFilters">
+    <button data-type="Galaxy"><i class="dot" style="color:#d18cff"></i>Galaxy</button>
+    <button data-type="Globular"><i class="dot" style="color:#78ff9d"></i>Globular</button>
+    <button data-type="Open"><i class="dot" style="color:#ffd84d"></i>Open Cluster</button>
+    <button data-type="Diffuse Nebula"><i class="dot" style="color:#58e6ff"></i>Nebula</button>
+    <button data-type="Planetary Nebula"><i class="dot" style="color:#ffb36a"></i>Planetary</button>
+    <button data-type="Other"><i class="dot" style="color:#dfe7ff"></i>Other</button>
+  </div>
+</div></div>
+
+<div class="catalog" id="catalogModal">
+  <div class="catalog-panel">
+    <div class="catalog-head"><h2>Messier Catalog</h2><button class="close" id="catalogClose">✕</button></div>
+    <div class="catalog-toolbar">
+      <div class="tabs"><button class="tab active" data-tab="messier">Messier Catalog</button></div>
+      <input class="search" id="catalogSearch" type="text" placeholder="Search by ID, name, type, constellation...">
+    </div>
+    <div class="catalog-list" id="catalogList"></div>
+  </div>
+</div>
+
+<script>
+const locations={Tallinn:{name:'Tallinn, Estonia',lat:59.437,lon:24.7536,tz:'EEST (UTC+3)'},Tartu:{name:'Tartu, Estonia',lat:58.378,lon:26.729,tz:'EEST (UTC+3)'},Utrecht:{name:'Utrecht, Netherlands',lat:52.0907,lon:5.1214,tz:'CEST (UTC+2)'},London:{name:'London, UK',lat:51.5072,lon:-0.1276,tz:'BST (UTC+1)'},Berlin:{name:'Berlin, Germany',lat:52.52,lon:13.405,tz:'CEST (UTC+2)'}};
+const objects = [{"id": "M1", "name": "Crab Nebula", "type": "Supernova Remnant", "ra": 83.63292, "dec": 22.01444, "constellation": "Taurus", "search": "m1 crab nebula supernova remnant taurus"}, {"id": "M2", "name": "Messier 2", "type": "Globular", "ra": 323.3625, "dec": -0.82333, "constellation": "Aquarius", "search": "m2 messier 2 globular aquarius"}, {"id": "M3", "name": "Messier 3", "type": "Globular", "ra": 205.54833, "dec": 28.37722, "constellation": "Canes Venatici", "search": "m3 messier 3 globular canes venatici"}, {"id": "M4", "name": "Spider Globular Cluster", "type": "Globular", "ra": 245.89667, "dec": -26.52583, "constellation": "Scorpius", "search": "m4 spider globular cluster globular scorpius"}, {"id": "M5", "name": "Rose Cluster", "type": "Globular", "ra": 229.63833, "dec": 2.08111, "constellation": "Serpens", "search": "m5 rose cluster globular serpens"}, {"id": "M6", "name": "Butterfly Cluster", "type": "Open", "ra": 265.025, "dec": -32.21667, "constellation": "Scorpius", "search": "m6 butterfly cluster open scorpius"}, {"id": "M7", "name": "Ptolemy's Cluster", "type": "Open", "ra": 268.46333, "dec": -34.79278, "constellation": "Scorpius", "search": "m7 ptolemy's cluster open scorpius"}, {"id": "M8", "name": "Lagoon Nebula", "type": "Diffuse Nebula", "ra": 270.90417, "dec": -24.38667, "constellation": "Sagittarius", "search": "m8 lagoon nebula diffuse nebula sagittarius"}, {"id": "M9", "name": "Messier 9", "type": "Globular", "ra": 259.79917, "dec": -18.51639, "constellation": "Ophiuchus", "search": "m9 messier 9 globular ophiuchus"}, {"id": "M10", "name": "Messier 10", "type": "Globular", "ra": 254.28708, "dec": -4.09944, "constellation": "Ophiuchus", "search": "m10 messier 10 globular ophiuchus"}, {"id": "M11", "name": "Wild Duck Cluster", "type": "Open", "ra": 282.775, "dec": -6.26667, "constellation": "Scutum", "search": "m11 wild duck cluster open scutum"}, {"id": "M12", "name": "Messier 12", "type": "Globular", "ra": 251.80917, "dec": -1.94861, "constellation": "Ophiuchus", "search": "m12 messier 12 globular ophiuchus"}, {"id": "M13", "name": "Great Hercules Cluster", "type": "Globular", "ra": 250.42167, "dec": 36.46, "constellation": "Hercules", "search": "m13 great hercules cluster globular hercules"}, {"id": "M14", "name": "Messier 14", "type": "Globular", "ra": 264.40083, "dec": -3.24583, "constellation": "Ophiuchus", "search": "m14 messier 14 globular ophiuchus"}, {"id": "M15", "name": "Great Pegasus Cluster", "type": "Globular", "ra": 322.49292, "dec": 12.16694, "constellation": "Pegasus", "search": "m15 great pegasus cluster globular pegasus"}, {"id": "M16", "name": "Eagle Nebula", "type": "Diffuse Nebula", "ra": 274.7, "dec": -13.81667, "constellation": "Serpens", "search": "m16 eagle nebula diffuse nebula serpens"}, {"id": "M17", "name": "Omega Nebula", "type": "Diffuse Nebula", "ra": 275.10833, "dec": -16.17667, "constellation": "Sagittarius", "search": "m17 omega nebula diffuse nebula sagittarius"}, {"id": "M18", "name": "Black Swan Cluster", "type": "Open", "ra": 274.975, "dec": -17.13333, "constellation": "Sagittarius", "search": "m18 black swan cluster open sagittarius"}, {"id": "M19", "name": "Messier 19", "type": "Globular", "ra": 255.65708, "dec": -26.26806, "constellation": "Ophiuchus", "search": "m19 messier 19 globular ophiuchus"}, {"id": "M20", "name": "Trifid Nebula", "type": "Diffuse Nebula", "ra": 270.59583, "dec": -23.03, "constellation": "Sagittarius", "search": "m20 trifid nebula diffuse nebula sagittarius"}, {"id": "M21", "name": "Webb's Cross Cluster", "type": "Open", "ra": 271.15, "dec": -22.5, "constellation": "Sagittarius", "search": "m21 webb's cross cluster open sagittarius"}, {"id": "M22", "name": "Great Sagittarius Cluster", "type": "Globular", "ra": 279.09958, "dec": -23.90472, "constellation": "Sagittarius", "search": "m22 great sagittarius cluster globular sagittarius"}, {"id": "M23", "name": "Messier 23", "type": "Open", "ra": 269.2, "dec": -19.01667, "constellation": "Sagittarius", "search": "m23 messier 23 open sagittarius"}, {"id": "M24", "name": "Small Sagittarius Star Cloud", "type": "Star Cloud", "ra": 274.25, "dec": -18.55, "constellation": "Sagittarius", "search": "m24 small sagittarius star cloud star cloud sagittarius"}, {"id": "M25", "name": "Messier 25", "type": "Open", "ra": 277.9, "dec": -19.25, "constellation": "Sagittarius", "search": "m25 messier 25 open sagittarius"}, {"id": "M26", "name": "Messier 26", "type": "Open", "ra": 281.3, "dec": -9.4, "constellation": "Scutum", "search": "m26 messier 26 open scutum"}, {"id": "M27", "name": "Dumbbell Nebula", "type": "Planetary Nebula", "ra": 299.90125, "dec": 22.72111, "constellation": "Vulpecula", "search": "m27 dumbbell nebula planetary nebula vulpecula"}, {"id": "M28", "name": "Messier 28", "type": "Globular", "ra": 276.13708, "dec": -24.86972, "constellation": "Sagittarius", "search": "m28 messier 28 globular sagittarius"}, {"id": "M29", "name": "Cooling Tower Cluster", "type": "Open", "ra": 305.98333, "dec": 38.52333, "constellation": "Cygnus", "search": "m29 cooling tower cluster open cygnus"}, {"id": "M30", "name": "Jellyfish Cluster", "type": "Globular", "ra": 325.09208, "dec": -23.18, "constellation": "Capricornus", "search": "m30 jellyfish cluster globular capricornus"}, {"id": "M31", "name": "Andromeda Galaxy", "type": "Galaxy", "ra": 10.68458, "dec": 41.26917, "constellation": "Andromeda", "search": "m31 andromeda galaxy galaxy andromeda"}, {"id": "M32", "name": "Andromeda Satellite #1", "type": "Galaxy", "ra": 10.67417, "dec": 40.86528, "constellation": "Andromeda", "search": "m32 andromeda satellite #1 galaxy andromeda"}, {"id": "M33", "name": "Triangulum Galaxy", "type": "Galaxy", "ra": 23.45833, "dec": 30.66028, "constellation": "Triangulum", "search": "m33 triangulum galaxy galaxy triangulum"}, {"id": "M34", "name": "Spiral Cluster", "type": "Open", "ra": 40.525, "dec": 42.76667, "constellation": "Perseus", "search": "m34 spiral cluster open perseus"}, {"id": "M35", "name": "Shoe-Buckle Cluster", "type": "Open", "ra": 92.275, "dec": 24.35, "constellation": "Gemini", "search": "m35 shoe-buckle cluster open gemini"}, {"id": "M36", "name": "Pinwheel Cluster", "type": "Open", "ra": 84.05, "dec": 34.13444, "constellation": "Auriga", "search": "m36 pinwheel cluster open auriga"}, {"id": "M37", "name": "Salt and Pepper Cluster", "type": "Open", "ra": 88.075, "dec": 32.55056, "constellation": "Auriga", "search": "m37 salt and pepper cluster open auriga"}, {"id": "M38", "name": "Starfish Cluster", "type": "Open", "ra": 82.175, "dec": 35.855, "constellation": "Auriga", "search": "m38 starfish cluster open auriga"}, {"id": "M39", "name": "Pyramid Cluster", "type": "Open", "ra": 322.925, "dec": 48.43333, "constellation": "Cygnus", "search": "m39 pyramid cluster open cygnus"}, {"id": "M40", "name": "Winnecke 4", "type": "Double Star", "ra": 185.55208, "dec": 58.08306, "constellation": "Ursa Major", "search": "m40 winnecke 4 double star ursa major"}, {"id": "M41", "name": "Little Beehive Cluster", "type": "Open", "ra": 101.5, "dec": -20.76667, "constellation": "Canis Major", "search": "m41 little beehive cluster open canis major"}, {"id": "M42", "name": "Great Orion Nebula", "type": "Diffuse Nebula", "ra": 83.82208, "dec": -5.39111, "constellation": "Orion", "search": "m42 great orion nebula diffuse nebula orion"}, {"id": "M43", "name": "De Mairan's Nebula", "type": "Diffuse Nebula", "ra": 83.9, "dec": -5.26667, "constellation": "Orion", "search": "m43 de mairan's nebula diffuse nebula orion"}, {"id": "M44", "name": "Beehive Cluster", "type": "Open", "ra": 130.1, "dec": 19.98333, "constellation": "Cancer", "search": "m44 beehive cluster open cancer"}, {"id": "M45", "name": "Pleiades", "type": "Open", "ra": 56.85, "dec": 24.11667, "constellation": "Taurus", "search": "m45 pleiades open taurus"}, {"id": "M46", "name": "Messier 46", "type": "Open", "ra": 115.45, "dec": -14.81667, "constellation": "Puppis", "search": "m46 messier 46 open puppis"}, {"id": "M47", "name": "Messier 47", "type": "Open", "ra": 114.15, "dec": -14.5, "constellation": "Puppis", "search": "m47 messier 47 open puppis"}, {"id": "M48", "name": "Messier 48", "type": "Open", "ra": 123.425, "dec": -5.75, "constellation": "Hydra", "search": "m48 messier 48 open hydra"}, {"id": "M49", "name": "Messier 49", "type": "Galaxy", "ra": 187.44458, "dec": 8.00056, "constellation": "Virgo", "search": "m49 messier 49 galaxy virgo"}, {"id": "M50", "name": "Heart-Shaped Cluster", "type": "Open", "ra": 105.8, "dec": -8.33333, "constellation": "Monoceros", "search": "m50 heart-shaped cluster open monoceros"}, {"id": "M51", "name": "Whirlpool Galaxy", "type": "Galaxy", "ra": 202.46958, "dec": 47.19528, "constellation": "Canes Venatici", "search": "m51 whirlpool galaxy galaxy canes venatici"}, {"id": "M52", "name": "Scorpion Cluster", "type": "Open", "ra": 351.05, "dec": 61.58333, "constellation": "Cassiopeia", "search": "m52 scorpion cluster open cassiopeia"}, {"id": "M53", "name": "Messier 53", "type": "Globular", "ra": 198.23042, "dec": 18.16806, "constellation": "Coma Berenices", "search": "m53 messier 53 globular coma berenices"}, {"id": "M54", "name": "Messier 54", "type": "Globular", "ra": 283.76375, "dec": -30.48, "constellation": "Sagittarius", "search": "m54 messier 54 globular sagittarius"}, {"id": "M55", "name": "Specter Cluster", "type": "Globular", "ra": 294.99875, "dec": -30.96472, "constellation": "Sagittarius", "search": "m55 specter cluster globular sagittarius"}, {"id": "M56", "name": "Messier 56", "type": "Globular", "ra": 289.14833, "dec": 30.18361, "constellation": "Lyra", "search": "m56 messier 56 globular lyra"}, {"id": "M57", "name": "Ring Nebula", "type": "Planetary Nebula", "ra": 283.39625, "dec": 33.02917, "constellation": "Lyra", "search": "m57 ring nebula planetary nebula lyra"}, {"id": "M58", "name": "Messier 58", "type": "Galaxy", "ra": 189.43125, "dec": 11.81806, "constellation": "Virgo", "search": "m58 messier 58 galaxy virgo"}, {"id": "M59", "name": "Messier 59", "type": "Galaxy", "ra": 190.50958, "dec": 11.64694, "constellation": "Virgo", "search": "m59 messier 59 galaxy virgo"}, {"id": "M60", "name": "Messier 60", "type": "Galaxy", "ra": 190.915, "dec": 11.5525, "constellation": "Virgo", "search": "m60 messier 60 galaxy virgo"}, {"id": "M61", "name": "Swelling Spiral Galaxy", "type": "Galaxy", "ra": 185.47875, "dec": 4.47361, "constellation": "Virgo", "search": "m61 swelling spiral galaxy galaxy virgo"}, {"id": "M62", "name": "Flickering Globular", "type": "Globular", "ra": 255.3025, "dec": -30.1125, "constellation": "Ophiuchus", "search": "m62 flickering globular globular ophiuchus"}, {"id": "M63", "name": "Sunflower Galaxy", "type": "Galaxy", "ra": 198.95542, "dec": 42.02917, "constellation": "Canes Venatici", "search": "m63 sunflower galaxy galaxy canes venatici"}, {"id": "M64", "name": "Black Eye Galaxy", "type": "Galaxy", "ra": 194.18208, "dec": 21.68278, "constellation": "Coma Berenices", "search": "m64 black eye galaxy galaxy coma berenices"}, {"id": "M65", "name": "Leo Triplet - M65", "type": "Galaxy", "ra": 169.73292, "dec": 13.09222, "constellation": "Leo", "search": "m65 leo triplet - m65 galaxy leo"}, {"id": "M66", "name": "Leo Triplet - M66", "type": "Galaxy", "ra": 170.0625, "dec": 12.99167, "constellation": "Leo", "search": "m66 leo triplet - m66 galaxy leo"}, {"id": "M67", "name": "King Cobra Cluster", "type": "Open", "ra": 132.825, "dec": 11.81667, "constellation": "Cancer", "search": "m67 king cobra cluster open cancer"}, {"id": "M68", "name": "Messier 68", "type": "Globular", "ra": 189.86667, "dec": -26.74417, "constellation": "Hydra", "search": "m68 messier 68 globular hydra"}, {"id": "M69", "name": "Messier 69", "type": "Globular", "ra": 277.84625, "dec": -32.34806, "constellation": "Sagittarius", "search": "m69 messier 69 globular sagittarius"}, {"id": "M70", "name": "Messier 70", "type": "Globular", "ra": 280.80333, "dec": -32.29222, "constellation": "Sagittarius", "search": "m70 messier 70 globular sagittarius"}, {"id": "M71", "name": "Angelfish Cluster", "type": "Globular", "ra": 298.44375, "dec": 18.77917, "constellation": "Sagitta", "search": "m71 angelfish cluster globular sagitta"}, {"id": "M72", "name": "Messier 72", "type": "Globular", "ra": 313.36542, "dec": -12.53722, "constellation": "Aquarius", "search": "m72 messier 72 globular aquarius"}, {"id": "M73", "name": "Messier 73", "type": "Asterism", "ra": 314.725, "dec": -12.63333, "constellation": "Aquarius", "search": "m73 messier 73 asterism aquarius"}, {"id": "M74", "name": "Phantom Galaxy", "type": "Galaxy", "ra": 24.17417, "dec": 15.78361, "constellation": "Pisces", "search": "m74 phantom galaxy galaxy pisces"}, {"id": "M75", "name": "Messier 75", "type": "Globular", "ra": 301.52, "dec": -21.92111, "constellation": "Sagittarius", "search": "m75 messier 75 globular sagittarius"}, {"id": "M76", "name": "Little Dumbbell Nebula", "type": "Planetary Nebula", "ra": 25.6, "dec": 51.57528, "constellation": "Perseus", "search": "m76 little dumbbell nebula planetary nebula perseus"}, {"id": "M77", "name": "Cetus A", "type": "Galaxy", "ra": 40.66958, "dec": -0.01333, "constellation": "Cetus", "search": "m77 cetus a galaxy cetus"}, {"id": "M78", "name": "Messier 78", "type": "Diffuse Nebula", "ra": 86.69458, "dec": 0.01389, "constellation": "Orion", "search": "m78 messier 78 diffuse nebula orion"}, {"id": "M79", "name": "Messier 79", "type": "Globular", "ra": 81.04417, "dec": -24.52417, "constellation": "Lepus", "search": "m79 messier 79 globular lepus"}, {"id": "M80", "name": "Messier 80", "type": "Globular", "ra": 244.26, "dec": -22.97611, "constellation": "Scorpius", "search": "m80 messier 80 globular scorpius"}, {"id": "M81", "name": "Bode's Galaxy", "type": "Galaxy", "ra": 148.88833, "dec": 69.06528, "constellation": "Ursa Major", "search": "m81 bode's galaxy galaxy ursa major"}, {"id": "M82", "name": "Cigar Galaxy", "type": "Galaxy", "ra": 148.9675, "dec": 69.67972, "constellation": "Ursa Major", "search": "m82 cigar galaxy galaxy ursa major"}, {"id": "M83", "name": "Southern Pinwheel Galaxy", "type": "Galaxy", "ra": 204.25375, "dec": -29.86583, "constellation": "Hydra", "search": "m83 southern pinwheel galaxy galaxy hydra"}, {"id": "M84", "name": "Messier 84", "type": "Galaxy", "ra": 186.26542, "dec": 12.88694, "constellation": "Virgo", "search": "m84 messier 84 galaxy virgo"}, {"id": "M85", "name": "Messier 85", "type": "Galaxy", "ra": 186.35, "dec": 18.19111, "constellation": "Coma Berenices", "search": "m85 messier 85 galaxy coma berenices"}, {"id": "M86", "name": "Messier 86", "type": "Galaxy", "ra": 186.54875, "dec": 12.94611, "constellation": "Virgo", "search": "m86 messier 86 galaxy virgo"}, {"id": "M87", "name": "Virgo A", "type": "Galaxy", "ra": 187.70583, "dec": 12.39111, "constellation": "Virgo", "search": "m87 virgo a galaxy virgo"}, {"id": "M88", "name": "Messier 88", "type": "Galaxy", "ra": 187.99667, "dec": 14.42056, "constellation": "Coma Berenices", "search": "m88 messier 88 galaxy coma berenices"}, {"id": "M89", "name": "Messier 89", "type": "Galaxy", "ra": 188.91583, "dec": 12.55639, "constellation": "Virgo", "search": "m89 messier 89 galaxy virgo"}, {"id": "M90", "name": "Carabin Galaxy", "type": "Galaxy", "ra": 189.2075, "dec": 13.16278, "constellation": "Virgo", "search": "m90 carabin galaxy galaxy virgo"}, {"id": "M91", "name": "Messier 91", "type": "Galaxy", "ra": 188.86, "dec": 14.49639, "constellation": "Coma Berenices", "search": "m91 messier 91 galaxy coma berenices"}, {"id": "M92", "name": "Messier 92", "type": "Globular", "ra": 259.28083, "dec": 43.13583, "constellation": "Hercules", "search": "m92 messier 92 globular hercules"}, {"id": "M93", "name": "Critter Cluster", "type": "Open", "ra": 116.15, "dec": -23.86667, "constellation": "Puppis", "search": "m93 critter cluster open puppis"}, {"id": "M94", "name": "Cat's Eye Galaxy", "type": "Galaxy", "ra": 192.72125, "dec": 41.12056, "constellation": "Canes Venatici", "search": "m94 cat's eye galaxy galaxy canes venatici"}, {"id": "M95", "name": "Messier 95", "type": "Galaxy", "ra": 160.99042, "dec": 11.70389, "constellation": "Leo", "search": "m95 messier 95 galaxy leo"}, {"id": "M96", "name": "Messier 96", "type": "Galaxy", "ra": 161.69042, "dec": 11.82, "constellation": "Leo", "search": "m96 messier 96 galaxy leo"}, {"id": "M97", "name": "Owl Nebula", "type": "Planetary Nebula", "ra": 168.69875, "dec": 55.01917, "constellation": "Ursa Major", "search": "m97 owl nebula planetary nebula ursa major"}, {"id": "M98", "name": "Messier 98", "type": "Galaxy", "ra": 183.45125, "dec": 14.90056, "constellation": "Coma Berenices", "search": "m98 messier 98 galaxy coma berenices"}, {"id": "M99", "name": "St. Catherine's Wheel", "type": "Galaxy", "ra": 184.70667, "dec": 14.41639, "constellation": "Coma Berenices", "search": "m99 st. catherine's wheel galaxy coma berenices"}, {"id": "M100", "name": "Mirror Galaxy", "type": "Galaxy", "ra": 185.72875, "dec": 15.8225, "constellation": "Coma Berenices", "search": "m100 mirror galaxy galaxy coma berenices"}, {"id": "M101", "name": "Pinwheel Galaxy", "type": "Galaxy", "ra": 210.8025, "dec": 54.34917, "constellation": "Ursa Major", "search": "m101 pinwheel galaxy galaxy ursa major"}, {"id": "M102", "name": "Spindle Galaxy", "type": "Galaxy", "ra": 226.62292, "dec": 55.76333, "constellation": "Draco", "search": "m102 spindle galaxy galaxy draco"}, {"id": "M103", "name": "Messier 103", "type": "Open", "ra": 23.3, "dec": 60.7, "constellation": "Cassiopeia", "search": "m103 messier 103 open cassiopeia"}, {"id": "M104", "name": "Sombrero Galaxy", "type": "Galaxy", "ra": 189.9975, "dec": -11.62306, "constellation": "Virgo", "search": "m104 sombrero galaxy galaxy virgo"}, {"id": "M105", "name": "Messier 105", "type": "Galaxy", "ra": 161.95667, "dec": 12.58167, "constellation": "Leo", "search": "m105 messier 105 galaxy leo"}, {"id": "M106", "name": "Messier 106", "type": "Galaxy", "ra": 184.73958, "dec": 47.30389, "constellation": "Canes Venatici", "search": "m106 messier 106 galaxy canes venatici"}, {"id": "M107", "name": "Crucifix Cluster", "type": "Globular", "ra": 248.13292, "dec": -13.05389, "constellation": "Ophiuchus", "search": "m107 crucifix cluster globular ophiuchus"}, {"id": "M108", "name": "Surfboard Galaxy", "type": "Galaxy", "ra": 167.87917, "dec": 55.67417, "constellation": "Ursa Major", "search": "m108 surfboard galaxy galaxy ursa major"}, {"id": "M109", "name": "Vacuum Cleaner Galaxy", "type": "Galaxy", "ra": 179.4, "dec": 53.37444, "constellation": "Ursa Major", "search": "m109 vacuum cleaner galaxy galaxy ursa major"}, {"id": "M110", "name": "Andromeda Satellite #2", "type": "Galaxy", "ra": 10.09208, "dec": 41.68528, "constellation": "Andromeda", "search": "m110 andromeda satellite #2 galaxy andromeda"}];
+const stars = [{"name": "Polaris", "ra": 37.95417, "dec": 89.26417, "mag": 1.98, "search": "polaris"}, {"name": "Sirius", "ra": 101.2875, "dec": -16.71611, "mag": -1.46, "search": "sirius"}, {"name": "Canopus", "ra": 95.9875, "dec": -52.69583, "mag": -0.74, "search": "canopus"}, {"name": "Arcturus", "ra": 213.91667, "dec": 19.1825, "mag": -0.05, "search": "arcturus"}, {"name": "Vega", "ra": 279.23333, "dec": 38.78361, "mag": 0.03, "search": "vega"}, {"name": "Capella", "ra": 79.17083, "dec": 45.99806, "mag": 0.08, "search": "capella"}, {"name": "Rigel", "ra": 78.63333, "dec": -8.20167, "mag": 0.12, "search": "rigel"}, {"name": "Procyon", "ra": 114.825, "dec": 5.225, "mag": 0.38, "search": "procyon"}, {"name": "Achernar", "ra": 24.42917, "dec": -57.23667, "mag": 0.45, "search": "achernar"}, {"name": "Betelgeuse", "ra": 88.79167, "dec": 7.40694, "mag": 0.5, "search": "betelgeuse"}, {"name": "Hadar", "ra": 210.95417, "dec": -60.37306, "mag": 0.61, "search": "hadar"}, {"name": "Altair", "ra": 297.69583, "dec": 8.86833, "mag": 0.77, "search": "altair"}, {"name": "Aldebaran", "ra": 68.97917, "dec": 16.50917, "mag": 0.87, "search": "aldebaran"}, {"name": "Acrux", "ra": 186.65, "dec": -63.09917, "mag": 0.77, "search": "acrux"}, {"name": "Spica", "ra": 201.3, "dec": -11.16139, "mag": 0.98, "search": "spica"}, {"name": "Antares", "ra": 247.35, "dec": -26.43194, "mag": 1.06, "search": "antares"}, {"name": "Pollux", "ra": 116.32917, "dec": 28.02639, "mag": 1.14, "search": "pollux"}, {"name": "Fomalhaut", "ra": 344.4125, "dec": -29.62222, "mag": 1.16, "search": "fomalhaut"}, {"name": "Deneb", "ra": 310.35833, "dec": 45.28028, "mag": 1.25, "search": "deneb"}, {"name": "Mimosa", "ra": 191.92917, "dec": -59.68861, "mag": 1.25, "search": "mimosa"}, {"name": "Regulus", "ra": 152.09167, "dec": 11.96722, "mag": 1.35, "search": "regulus"}, {"name": "Adhara", "ra": 104.65417, "dec": -28.97222, "mag": 1.5, "search": "adhara"}, {"name": "Castor", "ra": 113.65, "dec": 31.88833, "mag": 1.58, "search": "castor"}, {"name": "Gacrux", "ra": 187.79167, "dec": -57.11333, "mag": 1.59, "search": "gacrux"}, {"name": "Bellatrix", "ra": 81.28333, "dec": 6.34972, "mag": 1.64, "search": "bellatrix"}, {"name": "Elnath", "ra": 81.57083, "dec": 28.6075, "mag": 1.65, "search": "elnath"}, {"name": "Miaplacidus", "ra": 138.3, "dec": -69.71722, "mag": 1.67, "search": "miaplacidus"}, {"name": "Alnilam", "ra": 84.05, "dec": -1.20194, "mag": 1.69, "search": "alnilam"}, {"name": "Alnair", "ra": 332.05833, "dec": -46.96083, "mag": 1.74, "search": "alnair"}, {"name": "Alioth", "ra": 193.50833, "dec": 55.95972, "mag": 1.76, "search": "alioth"}, {"name": "Dubhe", "ra": 165.92917, "dec": 61.75083, "mag": 1.79, "search": "dubhe"}, {"name": "Mirfak", "ra": 51.07917, "dec": 49.86111, "mag": 1.79, "search": "mirfak"}, {"name": "Wezen", "ra": 107.09583, "dec": -26.39333, "mag": 1.83, "search": "wezen"}, {"name": "Sargas", "ra": 264.32917, "dec": -42.99778, "mag": 1.86, "search": "sargas"}, {"name": "Kaus Australis", "ra": 276.04167, "dec": -34.38472, "mag": 1.79, "search": "kaus australis"}, {"name": "Avior", "ra": 125.62917, "dec": -59.50972, "mag": 1.86, "search": "avior"}, {"name": "Alkaid", "ra": 206.88333, "dec": 49.31333, "mag": 1.86, "search": "alkaid"}, {"name": "Menkalinan", "ra": 89.88333, "dec": 44.9475, "mag": 1.9, "search": "menkalinan"}, {"name": "Atria", "ra": 252.1625, "dec": -69.02778, "mag": 1.91, "search": "atria"}, {"name": "Alhena", "ra": 99.42917, "dec": 16.39917, "mag": 1.93, "search": "alhena"}, {"name": "Peacock", "ra": 306.40833, "dec": -56.735, "mag": 1.94, "search": "peacock"}, {"name": "Mirzam", "ra": 95.67083, "dec": -17.95583, "mag": 1.98, "search": "mirzam"}, {"name": "Alpheratz", "ra": 2.09583, "dec": 29.09083, "mag": 2.07, "search": "alpheratz"}, {"name": "Hamal", "ra": 31.79167, "dec": 23.4625, "mag": 2.01, "search": "hamal"}, {"name": "Schedar", "ra": 10.12917, "dec": 56.5375, "mag": 2.24, "search": "schedar"}, {"name": "Caph", "ra": 2.29583, "dec": 59.14972, "mag": 2.27, "search": "caph"}, {"name": "Algol", "ra": 47.04167, "dec": 40.95556, "mag": 2.12, "search": "algol"}, {"name": "Mizar", "ra": 200.97917, "dec": 54.92528, "mag": 2.23, "search": "mizar"}, {"name": "Merak", "ra": 165.45833, "dec": 56.3825, "mag": 2.37, "search": "merak"}];
+const colors={'Galaxy':'#d18cff','Globular':'#78ff9d','Open':'#ffd84d','Diffuse Nebula':'#58e6ff','Planetary Nebula':'#ffb36a','Other':'#dfe7ff'};
+let selected=null, displayMode='highlight', activeTab='messier';
+const enabledTypes=new Set(['Galaxy','Globular','Open','Diffuse Nebula','Planetary Nebula','Other']);
+const vp=document.getElementById('viewport'), sky=document.getElementById('skySvg'), panel=document.getElementById('panel'),
+dtEl=document.getElementById('datetime'), latEl=document.getElementById('latInput'), lonEl=document.getElementById('lonInput'),
+prevStepBtn=document.getElementById('prevStepBtn'), nextStepBtn=document.getElementById('nextStepBtn'), stepEl=document.getElementById('timeStep'),
+nowBtn=document.getElementById('nowBtn'), useLocationBtn=document.getElementById('useLocationBtn'), messierCatalogBtn=document.getElementById('messierCatalogBtn'),
+toggleDSO=document.getElementById('toggleDSO'), toggleStarNames=document.getElementById('toggleStarNames'),
+toggleConstLines=document.getElementById('toggleConstLines'), toggleConstLabels=document.getElementById('toggleConstLabels'),
+minAltEl=document.getElementById('minAlt'), minAltLabel=document.getElementById('minAltLabel'),
+catalogModal=document.getElementById('catalogModal'), catalogList=document.getElementById('catalogList'), catalogSearch=document.getElementById('catalogSearch'), visibleMessierBody=document.getElementById('visibleMessierBody'), visibleMessierCount=document.getElementById('visibleMessierCount'), moonSummary=document.getElementById('moonSummary'), mwSummary=document.getElementById('mwSummary');
+function scaleUI(){ vp.style.transform='none'; vp.style.left='0'; vp.style.top='0'; }
+function pad(n){return String(n).padStart(2,'0')}
+function init(){
+  const d=new Date();
+  const local=new Date(d.getTime()-d.getSeconds()*1000-d.getMilliseconds());
+  dtEl.value=`${local.getFullYear()}-${pad(local.getMonth()+1)}-${pad(local.getDate())}T${pad(local.getHours())}:${pad(local.getMinutes())}`;
+  latEl.value='59.4370';
+  lonEl.value='24.7536';
+}
+function d2r(d){return d*Math.PI/180} function r2d(r){return r*180/Math.PI} function norm(d){return ((d%360)+360)%360} function jd(date){return date.getTime()/86400000+2440587.5} function gmst(date){return norm(280.46061837+360.98564736629*(jd(date)-2451545))}
+function when(){return new Date((dtEl.value||'2026-05-15T23:30') + ':00')}
+function place(){
+  const lat=parseFloat(latEl.value);
+  const lon=parseFloat(lonEl.value);
+  return {name:'Custom',lat:isFinite(lat)?lat:59.437,lon:isFinite(lon)?lon:24.7536,tz:'Local'};
+}
+function altAz(ra,dec,date,lat,lon){const lst=norm(gmst(date)+lon),ha=d2r(norm(lst-ra)),de=d2r(dec),la=d2r(lat);const sa=Math.sin(de)*Math.sin(la)+Math.cos(de)*Math.cos(la)*Math.cos(ha);const alt=Math.asin(Math.max(-1,Math.min(1,sa)));let caz=(Math.sin(de)-Math.sin(alt)*Math.sin(la))/(Math.cos(alt)*Math.cos(la));let az=Math.acos(Math.max(-1,Math.min(1,caz))); if(Math.sin(ha)>0) az=2*Math.PI-az; return {alt:r2d(alt),az:r2d(az)};}
+function sunMoonDay(date){return jd(date)-2451545.0;}
+function rightAscension(l,b){const e=d2r(23.4397);return Math.atan2(Math.sin(l)*Math.cos(e)-Math.tan(b)*Math.sin(e),Math.cos(l));}
+function declination(l,b){const e=d2r(23.4397);return Math.asin(Math.sin(b)*Math.cos(e)+Math.cos(b)*Math.sin(e)*Math.sin(l));}
+function sunCoords(d){const M=d2r(357.5291 + 0.98560028*d); const C=d2r(1.9148*Math.sin(M)+0.02*Math.sin(2*M)+0.0003*Math.sin(3*M)); const P=d2r(102.9372); const L=M+C+P+Math.PI; return {ra:rightAscension(L,0), dec:declination(L,0), lon:L};}
+function moonCoords(d){const L=d2r(218.316 + 13.176396*d), M=d2r(134.963 + 13.064993*d), F=d2r(93.272 + 13.229350*d); const l=L+d2r(6.289)*Math.sin(M), b=d2r(5.128)*Math.sin(F), dist=385001-20905*Math.cos(M); return {ra:rightAscension(l,b), dec:declination(l,b), dist, lon:l, lat:b};}
+function moonPhaseName(frac){
+  if(frac<0.03 || frac>0.97) return 'New Moon';
+  if(frac<0.22) return 'Waxing Crescent';
+  if(frac<0.28) return 'First Quarter';
+  if(frac<0.47) return 'Waxing Gibbous';
+  if(frac<0.53) return 'Full Moon';
+  if(frac<0.72) return 'Waning Gibbous';
+  if(frac<0.78) return 'Last Quarter';
+  return 'Waning Crescent';
+}
+function moonPhaseEmoji(frac){
+  if(frac<0.03 || frac>0.97) return '🌑';
+  if(frac<0.22) return '🌒';
+  if(frac<0.28) return '🌓';
+  if(frac<0.47) return '🌔';
+  if(frac<0.53) return '🌕';
+  if(frac<0.72) return '🌖';
+  if(frac<0.78) return '🌗';
+  return '🌘';
+}
+function getMoonData(date,lat,lon){
+  const d=sunMoonDay(date), sun=sunCoords(d), moon=moonCoords(d);
+  const ra=r2d(moon.ra), dec=r2d(moon.dec), pos=altAz(ra,dec,date,lat,lon);
+  const phaseFrac=norm(r2d(moon.lon - sun.lon))/360;
+  const illum=(1-Math.cos(2*Math.PI*phaseFrac))/2;
+  return {ra, dec, alt:pos.alt, az:pos.az, illum, phaseFrac, phaseName:moonPhaseName(phaseFrac), phaseEmoji:moonPhaseEmoji(phaseFrac)};
+}
+const MILKY_WAY_POINTS=[[0,62],[20,58],[40,50],[60,32],[83,-4],[100,-25],[120,-45],[150,-58],[190,-55],[230,-45],[266,-29],[285,-10],[300,8],[320,35],[340,55],[360,62]];
+function getMilkyWayData(date,lat,lon){
+  const points=MILKY_WAY_POINTS.map(([ra,dec])=>({ra,dec,...altAz(ra,dec,date,lat,lon)}));
+  const core=altAz(266.4168,-29.0078,date,lat,lon);
+  return {points, coreAlt:core.alt, coreAz:core.az};
+}
+function drawMoon(){
+  const p=place(), t=when(), m=getMoonData(t,p.lat,p.lon);
+  if(m.alt<=0) return;
+  const xy=project(m.alt,m.az), g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('class','moon-marker');
+  const glow=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  glow.setAttribute('class','glow');
+  glow.setAttribute('cx',xy.x);
+  glow.setAttribute('cy',xy.y);
+  glow.setAttribute('r',20);
+  glow.setAttribute('fill','#ffd37c');
+  g.appendChild(glow);
+  const backing=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  backing.setAttribute('class','backing');
+  backing.setAttribute('cx',xy.x);
+  backing.setAttribute('cy',xy.y);
+  backing.setAttribute('r',12.5);
+  g.appendChild(backing);
+  const icon=document.createElementNS('http://www.w3.org/2000/svg','text');
+  icon.setAttribute('class','icon');
+  icon.setAttribute('x',xy.x);
+  icon.setAttribute('y',xy.y+7);
+  icon.setAttribute('text-anchor','middle');
+  icon.textContent=m.phaseEmoji;
+  g.appendChild(icon);
+  const tx=document.createElementNS('http://www.w3.org/2000/svg','text');
+  tx.setAttribute('x',xy.x+16);
+  tx.setAttribute('y',xy.y-12);
+  tx.textContent='Moon';
+  g.appendChild(tx);
+  sky.appendChild(g);
+}
+function drawMilkyWay(){
+  const p=place(), t=when(), mw=getMilkyWayData(t,p.lat,p.lon);
+  const visible=mw.points.filter(pt=>pt.alt>0);
+  if(visible.length<2) return;
+  const d=visible.map((pt,i)=>{ const xy=project(pt.alt,pt.az); return `${i===0?'M':'L'}${xy.x.toFixed(1)} ${xy.y.toFixed(1)}`; }).join(' ');
+  const pth=document.createElementNS('http://www.w3.org/2000/svg','path');
+  pth.setAttribute('clip-path','url(#discClip)');
+  pth.setAttribute('d',d);
+  pth.setAttribute('stroke','rgba(230,245,255,.14)');
+  pth.setAttribute('stroke-width','48');
+  pth.setAttribute('stroke-linecap','round');
+  pth.setAttribute('stroke-linejoin','round');
+  pth.setAttribute('fill','none');
+  pth.setAttribute('filter','url(#glow)');
+  sky.appendChild(pth);
+}
+function renderSkyExtras(){
+  const p=place(), t=when();
+  const m=getMoonData(t,p.lat,p.lon);
+  const mw=getMilkyWayData(t,p.lat,p.lon);
+  moonSummary.innerHTML=`<strong>${m.phaseEmoji} Moon patrol:</strong> ${m.phaseName} · ${(m.illum*100).toFixed(0)}% lit · ${m.alt>0?`${m.alt.toFixed(1)}° ${dir(m.az)}`:'below horizon'}<span class="tagline">${moonTagline(m)}</span>`;
+  mwSummary.innerHTML=`<strong>Galactic highway:</strong> core ${mw.coreAlt>0?`${mw.coreAlt.toFixed(1)}° ${dir(mw.coreAz)}`:'below horizon'}<span class="tagline">${milkyWayTagline(mw)}</span>`;
+}
+
+function project(alt,az){const cx=450,cy=450,R=400,r=(90-Math.max(0,alt))/90*R,a=d2r(az);return {x:cx+r*Math.sin(a),y:cy-r*Math.cos(a)};}
+function dir(az){return ['N','NE','E','SE','S','SW','W','NW'][Math.round(norm(az)/45)%8]}
+function category(type){if(['Supernova Remnant','Double Star','Asterism','Star Cloud'].includes(type)) return 'Other'; if(['Galaxy'].includes(type)) return 'Galaxy'; if(['Globular'].includes(type)) return 'Globular'; if(['Open'].includes(type)) return 'Open'; if(['Planetary Nebula'].includes(type)) return 'Planetary Nebula'; return 'Diffuse Nebula';}
+function cardAsset(type){
+  const cat=category(type);
+  if(cat==='Galaxy') return 'assets/badge_galaxy.png';
+  if(cat==='Globular') return 'assets/badge_globular.png';
+  if(cat==='Open') return 'assets/badge_open_cluster.png';
+  if(cat==='Planetary Nebula') return 'assets/badge_planetary_nebula.png';
+  if(cat==='Diffuse Nebula') return 'assets/badge_diffuse_nebula.png';
+  return 'assets/badge_other.png';
+}
+function missionNoteFor(o){
+  const cat=o.cat || category(o.type);
+  if(o.alt <= 0) return 'This target is hiding below the horizon. AstroSheep recommends patience.';
+  if(cat==='Galaxy') return 'Deep-sky classic. Longer capture sessions make the spiral fluff appear.';
+  if(cat==='Globular') return 'Bright, compact, and sheep-approved. A reliable cluster mission.';
+  if(cat==='Open') return 'Wide and friendly. Perfect for a relaxed AstroSheeps grazing session.';
+  if(cat==='Planetary Nebula') return 'Tiny cosmic donut detected. Precision mission recommended.';
+  if(cat==='Diffuse Nebula') return 'Diffuse target. Darker skies help the cosmic fog stand out.';
+  return 'Unusual Messier target. AstroSheep says: investigate with curiosity.';
+}
+function moonTagline(m){
+  if(m.illum > .75) return 'Moon patrol is bright tonight — faint fuzzies may struggle.';
+  if(m.illum < .15) return 'Dark-sky bonus unlocked. Sheep-approved deep-sky conditions.';
+  if(m.alt > 0) return 'Moon is above the horizon. Check faint targets carefully.';
+  return 'Moon is off duty from your current sky view.';
+}
+function milkyWayTagline(mw){
+  if(mw.coreAlt > 15) return 'Galactic highway is open. Core visibility looks promising.';
+  if(mw.coreAlt > 0) return 'Core is low but present. A clear horizon matters.';
+  return 'Galactic core is below the horizon, but the band still updates with time.';
+}
+function computedObjects(){const p=place(),t=when(); return objects.map(o=>Object.assign({},o,altAz(o.ra,o.dec,t,p.lat,p.lon),{cat:category(o.type)}));}
+function computedStars(){const p=place(),t=when(); return stars.map(s=>Object.assign({},s,altAz(s.ra,s.dec,t,p.lat,p.lon)));}
+function base(){
+  sky.setAttribute('viewBox','0 0 900 900');
+  sky.innerHTML=`<defs><filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="8"/></filter><radialGradient id="skyGrad" cx="50%" cy="54%" r="62%"><stop offset="0" stop-color="#0b2b48" stop-opacity=".58"/><stop offset=".72" stop-color="#07172b" stop-opacity=".52"/><stop offset="1" stop-color="#020714" stop-opacity=".42"/></radialGradient><clipPath id="discClip"><circle cx="450" cy="450" r="400"/></clipPath></defs><circle class="outer" cx="450" cy="450" r="400"/><g clip-path="url(#discClip)"><rect x="50" y="50" width="800" height="800" fill="url(#skyGrad)"/><circle class="grid" cx="450" cy="450" r="300"/><circle class="grid" cx="450" cy="450" r="200"/><circle class="grid" cx="450" cy="450" r="100"/><line class="grid" x1="50" y1="450" x2="850" y2="450"/><line class="grid" x1="450" y1="50" x2="450" y2="850"/></g><text class="skylabel" x="450" y="92" text-anchor="middle">N</text><text class="skylabel" x="450" y="834" text-anchor="middle">S</text><text class="skylabel" x="84" y="460" text-anchor="middle">E</text><text class="skylabel" x="816" y="460" text-anchor="middle">W</text><text class="altlabel" x="450" y="155" text-anchor="middle">75°</text><text class="altlabel" x="450" y="255" text-anchor="middle">60°</text><text class="altlabel" x="450" y="355" text-anchor="middle">45°</text><text class="altlabel" x="450" y="455" text-anchor="middle">30°</text><text class="altlabel" x="450" y="555" text-anchor="middle">15°</text>`;
+}
+
+function drawStars(){
+  const list=computedStars();
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('clip-path','url(#discClip)');
+  list.forEach(s=>{
+    if(s.alt<=0) return;
+    const xy=project(s.alt,s.az);
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('class','star');
+    c.setAttribute('cx',xy.x); c.setAttribute('cy',xy.y);
+    c.setAttribute('r',Math.max(0.8,3.8-Math.max(-1,s.mag)));
+    c.setAttribute('opacity',Math.min(.95,.36+(3.5-s.mag)/5));
+    g.appendChild(c);
+    if(toggleStarNames.checked && s.mag<1.8){
+      const tx=document.createElementNS('http://www.w3.org/2000/svg','text');
+      tx.setAttribute('class','star-label');
+      tx.setAttribute('x',xy.x+6); tx.setAttribute('y',xy.y-6);
+      tx.textContent=s.name; g.appendChild(tx);
+    }
+  });
+  sky.appendChild(g);
+}
+function drawConstellations(){
+  const lineDefs = [
+    {name:'Ursa Major', stars:['Dubhe','Merak','Alioth','Mizar','Alkaid'], label:{ra:180,dec:55}},
+    {name:'Orion', stars:['Betelgeuse','Bellatrix','Alnilam','Rigel'], label:{ra:83,dec:0}},
+    {name:'Cassiopeia', stars:['Caph','Schedar'], label:{ra:10,dec:58}},
+    {name:'Summer Triangle', stars:['Deneb','Vega','Altair'], label:{ra:295,dec:31}},
+    {name:'Scorpius', stars:['Antares','Sargas','Shaula'], label:{ra:255,dec:-30}}
+  ];
+  const starMap = Object.fromEntries(computedStars().map(s=>[s.name,s]));
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('clip-path','url(#discClip)');
+  if(toggleConstLines.checked){
+    lineDefs.forEach(c=>{
+      const pts = c.stars.map(n=>starMap[n]).filter(Boolean).filter(s=>s.alt>0).map(s=>project(s.alt,s.az));
+      for(let i=0;i<pts.length-1;i++){
+        const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+        ln.setAttribute('x1',pts[i].x); ln.setAttribute('y1',pts[i].y);
+        ln.setAttribute('x2',pts[i+1].x); ln.setAttribute('y2',pts[i+1].y);
+        ln.setAttribute('stroke','rgba(88,230,255,.26)');
+        ln.setAttribute('stroke-width','1.2');
+        g.appendChild(ln);
+      }
+    });
+  }
+  if(toggleConstLabels.checked){
+    lineDefs.forEach(c=>{
+      const aa=altAz(c.label.ra,c.label.dec,when(),place().lat,place().lon);
+      if(aa.alt<=0) return;
+      const xy=project(aa.alt,aa.az);
+      const tx=document.createElementNS('http://www.w3.org/2000/svg','text');
+      tx.setAttribute('class','star-label');
+      tx.setAttribute('x',xy.x+6); tx.setAttribute('y',xy.y+4);
+      tx.setAttribute('opacity','0.85');
+      tx.textContent=c.name;
+      g.appendChild(tx);
+    });
+  }
+  sky.appendChild(g);
+}
+function objectVisibleByFilter(o,min){if(o.alt<=0) return false; if(!toggleDSO.checked) return false; if(!enabledTypes.has(o.cat)) return false; if(displayMode==='onlyAbove' && o.alt<min) return false; return true;}
+function drawObjects(list){const min=+minAltEl.value; const gAll=document.createElementNS('http://www.w3.org/2000/svg','g'); gAll.setAttribute('clip-path','url(#discClip)'); let count=0; list.forEach(o=>{if(!objectVisibleByFilter(o,min)) return; count++; const xy=project(o.alt,o.az), color=colors[o.cat]||'#fff', g=document.createElementNS('http://www.w3.org/2000/svg','g'); g.setAttribute('class',`marker ${o.id===selected?'selected':''} ${displayMode==='highlight'&&o.alt<min?'below-limit':''}`); g.style.color=color; g.onclick=()=>{selected=o.id; render();}; const glow=document.createElementNS('http://www.w3.org/2000/svg','circle'); glow.setAttribute('class','glow'); glow.setAttribute('cx',xy.x); glow.setAttribute('cy',xy.y); glow.setAttribute('r',displayMode==='highlight'&&o.alt>=min?13:10); glow.setAttribute('fill',color); g.appendChild(glow); const core=document.createElementNS('http://www.w3.org/2000/svg','circle'); core.setAttribute('class','core'); core.setAttribute('cx',xy.x); core.setAttribute('cy',xy.y); core.setAttribute('r',displayMode==='highlight'&&o.alt>=min?6.2:5); core.setAttribute('stroke',color); g.appendChild(core); if(o.id===selected){const h=document.createElementNS('http://www.w3.org/2000/svg','path'); h.setAttribute('class','cross'); h.setAttribute('d',`M${xy.x-9} ${xy.y} H ${xy.x+9} M ${xy.x} ${xy.y-9} V ${xy.y+9}`); g.appendChild(h);} const label=document.createElementNS('http://www.w3.org/2000/svg','text'); label.setAttribute('x',xy.x+10); label.setAttribute('y',xy.y-8); label.textContent=o.id; g.appendChild(label); gAll.appendChild(g); }); sky.appendChild(gAll); if(count===0){const t=document.createElementNS('http://www.w3.org/2000/svg','text'); t.setAttribute('class','no-targets'); t.setAttribute('x',450); t.setAttribute('y',450); t.textContent='No objects match the current filters'; sky.appendChild(t);} }
+function panelRender(list){
+  const o=selected ? list.find(x=>x.id===selected) : null;
+  if(!o){
+    panel.innerHTML=`<div class="panel-empty"><div class="kicker">AstroSheeps mission control</div><h3>No target selected</h3><p>AstroSheep is waiting for a new observing mission. Choose a Messier object from the side list or tap a marker on the planisphere.</p></div>`;
+    return;
+  }
+  const min=+minAltEl.value;
+  const above=o.alt>=min;
+  panel.innerHTML=`<button class="panel-close" id="panelCloseBtn" aria-label="Close">×</button><div class="panel-head"><div><h2>${o.id}</h2><h3>${o.name}</h3><p>${o.constellation} · ${o.type}</p></div><div class="object-img" style="background-image:url('${cardAsset(o.type)}')"></div></div><div class="badges"><span class="badge violet">${o.cat.toUpperCase()}</span><span class="badge mint">● ${above?'ABOVE LIMIT':'BELOW LIMIT'}</span></div><div class="facts"><div class="fact"><span>Altitude</span><strong>${o.alt.toFixed(1)}°</strong></div><div class="fact"><span>Azimuth</span><strong>${o.az.toFixed(1)}° (${dir(o.az)})</strong></div><div class="fact"><span>Coordinates</span><strong>RA ${(o.ra/15).toFixed(2)}h · Dec ${o.dec.toFixed(1)}°</strong></div><div class="fact"><span>Visibility</span><strong>${o.alt>0?'Above horizon':'Below horizon'}</strong></div></div><div class="sheep-note"><img src="assets/logo_sheep.png" alt=""><span><strong>Mission note:</strong> ${missionNoteFor(o)}</span></div>`;
+  const closeBtn=document.getElementById('panelCloseBtn');
+  if(closeBtn) closeBtn.addEventListener('click',()=>{selected=null; render();});
+}
+function updateControls(){
+  const min=+minAltEl.value;
+  minAltLabel.textContent=min;
+  minAltEl.style.setProperty('--progress',(min/80*100)+'%');
+  document.querySelectorAll('#visibilityFilters .chip').forEach(b=>b.classList.toggle('active',b.dataset.mode===displayMode));
+  document.querySelectorAll('#typeFilters button').forEach(b=>b.classList.toggle('off',!enabledTypes.has(b.dataset.type)));
+}
+function renderCatalog(){
+  const search=(catalogSearch.value||'').trim().toLowerCase();
+  const list=computedObjects()
+    .sort((a,b)=>a.id.localeCompare(b.id,undefined,{numeric:true}))
+    .filter(o=>o.search.includes(search));
+  catalogList.innerHTML=list.map(o=>`<div class="catalog-item" data-id="${o.id}"><h4>${o.id} — ${o.name}</h4><div class="catalog-meta"><span class="pill">${o.cat}</span><span>${o.constellation}</span></div><div class="catalog-alt">Alt ${o.alt.toFixed(1)}° · Az ${o.az.toFixed(1)}° · ${o.alt>0?'Visible':'Below horizon'}</div></div>`).join('');
+  catalogList.querySelectorAll('.catalog-item').forEach(el=>el.addEventListener('click',()=>{
+    selected=el.dataset.id;
+    catalogModal.classList.remove('open');
+    render();
+  }));
+}
+
+function renderVisibleMessierTable(list){
+  const min=+minAltEl.value;
+  const visible = list
+    .filter(o => o.alt > 0)
+    .filter(o => o.alt >= min)
+    .filter(o => enabledTypes.has(o.cat))
+    .sort((a,b)=>b.alt-a.alt || a.id.localeCompare(b.id, undefined, {numeric:true}));
+  visibleMessierCount.textContent = `${visible.length} visible`;
+  if(!visible.length){
+    visibleMessierBody.innerHTML = '<tr><td colspan="4" class="empty">No sheep-approved targets for the current filters. Try lowering Min Altitude or enabling more object types.</td></tr>';
+    return;
+  }
+  visibleMessierBody.innerHTML = visible.map(o => `<tr data-id="${o.id}" class="${o.id===selected?'active':''}"><td>${o.id}</td><td>${o.name}</td><td>${dir(o.az)}</td><td>${o.alt.toFixed(1)}°</td></tr>`).join('');
+  visibleMessierBody.querySelectorAll('tr[data-id]').forEach(row => row.addEventListener('click', ()=>{
+    selected = row.dataset.id;
+    render();
+  }));
+}
+
+function render(){
+  updateControls();
+  base();
+  drawMilkyWay();
+  drawStars();
+  drawMoon();
+  drawConstellations();
+  const list=computedObjects();
+  const hasSelection = !!(selected && list.find(x=>x.id===selected));
+  document.body.classList.toggle('has-selection', hasSelection);
+  document.body.classList.toggle('no-selection', !hasSelection);
+  drawObjects(list);
+  panelRender(list);
+  renderVisibleMessierTable(list);
+  renderSkyExtras();
+  renderCatalog();
+}
+
+document.getElementById('catalogBtn').addEventListener('click',()=>{catalogModal.classList.add('open'); renderCatalog();});
+document.getElementById('catalogClose').addEventListener('click',()=>catalogModal.classList.remove('open')); messierCatalogBtn.addEventListener('click',()=>{catalogModal.classList.add('open'); renderCatalog();});
+catalogModal.addEventListener('click',e=>{if(e.target===catalogModal) catalogModal.classList.remove('open');});
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{activeTab=btn.dataset.tab; document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t===btn)); catalogSearch.value=''; renderCatalog();}));
+catalogSearch.addEventListener('input',renderCatalog);
+function shiftDateTime(direction){
+  const step=stepEl.value;
+  const d=when();
+  if(step==='minute') d.setMinutes(d.getMinutes()+direction);
+  else if(step==='hour') d.setHours(d.getHours()+direction);
+  else d.setDate(d.getDate()+direction);
+  dtEl.value=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+prevStepBtn.addEventListener('click',()=>{shiftDateTime(-1); render();});
+nextStepBtn.addEventListener('click',()=>{shiftDateTime(1); render();});
+nowBtn.addEventListener('click',()=>{const d=new Date(); dtEl.value=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`; render();});
+useLocationBtn.addEventListener('click',()=>{
+  if(!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(pos=>{
+    latEl.value=pos.coords.latitude.toFixed(4);
+    lonEl.value=pos.coords.longitude.toFixed(4);
+    render();
+  });
+});
+document.querySelectorAll('#visibilityFilters .chip').forEach(btn=>btn.addEventListener('click',()=>{displayMode=btn.dataset.mode; render();}));
+document.querySelectorAll('#typeFilters button').forEach(btn=>btn.addEventListener('click',()=>{const t=btn.dataset.type; if(enabledTypes.has(t)) enabledTypes.delete(t); else enabledTypes.add(t); render();}));
+[dtEl,latEl,lonEl,minAltEl,toggleDSO,toggleStarNames,toggleConstLines,toggleConstLabels].forEach(el=>el.addEventListener('input',render));
+init(); render();
+</script>
+</body></html>
