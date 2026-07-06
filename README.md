@@ -1,6 +1,6 @@
-# 🐑 AstroSheeps Planisphere
+# 🐑 AstroSheep Planisphere
 
-**AstroSheeps Planisphere** is a playful, browser-based observing planner for Messier-object hunting, smart-telescope nights, and tiny cosmic sheep missions.
+**AstroSheep Planisphere** is a playful, browser-based observing planner for Messier-object hunting, smart-telescope nights, and tiny cosmic sheep missions.
 
 It combines a circular sky map, live Messier visibility, Moon phase/status, Milky Way position, altitude filtering, and object cards with mission notes — because deep-sky planning is better when the sheep are in mission control.
 
@@ -27,7 +27,7 @@ It combines a circular sky map, live Messier visibility, Moon phase/status, Milk
   - azimuth
   - coordinates
   - visibility status
-  - AstroSheeps mission note
+  - AstroSheep mission note
 - Includes Moon status:
   - phase
   - illumination
@@ -106,7 +106,7 @@ It is simply waiting for a more dramatic entrance.
 
 ---
 
-## 🐑 AstroSheeps mission notes
+## 🐑 AstroSheep mission notes
 
 Each selected object gets a small mission note, for example:
 
@@ -155,7 +155,7 @@ The visual identity is inspired by:
 
 - dark observatory dashboards
 - space mission patches
-- orange AstroSheeps accents
+- orange AstroSheep accents
 - glowing deep-sky badge art
 - smart-telescope field planning
 - one very serious sheep with a tablet
@@ -186,6 +186,6 @@ If you launch a sheep into space with it, please send screenshots.
 
 ---
 
-## 🐑 AstroSheeps Observatory Division
+## 🐑 AstroSheep Observatory Division
 
 **Plan the night. Pick the target. Trust the sheep.**
