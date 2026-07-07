@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AstroSheeps Planisphere</title>
+<title>AstroSheep Planisphere</title>
 <style>
 :root{--bg:#020714;--panel:rgba(5,14,30,.72);--panel2:rgba(4,12,26,.95);--line:rgba(196,222,255,.28);--lineSoft:rgba(196,222,255,.12);--text:#f5f8ff;--muted:#a9b6c7;--cyan:#58e6ff;--mint:#78ff9d;--violet:#d28cff;--gold:#ffd84d;--shadow:0 24px 90px rgba(0,0,0,.58);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
 *{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text)}
@@ -701,7 +701,7 @@ button,input,select{font:inherit} #viewport{position:fixed;left:0;top:0;width:15
 
 
 <style id="v23-astrosheeps-card-style">
-  /* Right card styling closer to AstroSheeps patch aesthetic */
+  /* Right card styling closer to Astro patch aesthetic */
   .side-panel{
     border:1px solid rgba(255,132,84,.34) !important;
     background:
@@ -1998,7 +1998,7 @@ button,input,select{font:inherit} #viewport{position:fixed;left:0;top:0;width:15
 
 
 <style id="v43-mission-note-fit-fix">
-  /* Compact the AstroSheeps mission note so it fits inside the card */
+  /* Compact the AstroSheep mission note so it fits inside the card */
   body.has-selection .sheep-note{
     margin-top:6px !important;
     padding:7px 10px !important;
@@ -4037,7 +4037,7 @@ button,input,select{font:inherit} #viewport{position:fixed;left:0;top:0;width:15
 </head>
 <body>
 <div id="viewport"><div class="app">
-  <div class="brand"><img src="assets/observatory_division_logo.png" alt="AstroSheeps logo"><div><h1>ASTRO<span class="brand-orange">SHEEPS</span></h1><p>PLANISPHERE</p></div></div>
+  <div class="brand"><img src="assets/observatory_division_logo.png" alt="AstroSheep logo"><div><h1>ASTRO<span class="brand-orange">SHEEP</span></h1><p>PLANISPHERE</p></div></div>
   <div class="top-controls">
     <div class="ctrl-row">
       <span class="top-label">Date and time</span>
@@ -4248,7 +4248,7 @@ function missionNoteFor(o){
   if(o.alt <= 0) return 'This target is hiding below the horizon. AstroSheep recommends patience.';
   if(cat==='Galaxy') return 'Deep-sky classic. Longer capture sessions make the spiral fluff appear.';
   if(cat==='Globular') return 'Bright, compact, and sheep-approved. A reliable cluster mission.';
-  if(cat==='Open') return 'Wide and friendly. Perfect for a relaxed AstroSheeps grazing session.';
+  if(cat==='Open') return 'Wide and friendly. Perfect for a relaxed AstroSheep grazing session.';
   if(cat==='Planetary Nebula') return 'Tiny cosmic donut detected. Precision mission recommended.';
   if(cat==='Diffuse Nebula') return 'Diffuse target. Darker skies help the cosmic fog stand out.';
   return 'Unusual Messier target. AstroSheep says: investigate with curiosity.';
@@ -4337,7 +4337,7 @@ function drawObjects(list){const min=+minAltEl.value; const gAll=document.create
 function panelRender(list){
   const o=selected ? list.find(x=>x.id===selected) : null;
   if(!o){
-    panel.innerHTML=`<div class="panel-empty"><div class="kicker">AstroSheeps mission control</div><h3>No target selected</h3><p>AstroSheep is waiting for a new observing mission. Choose a Messier object from the side list or tap a marker on the planisphere.</p></div>`;
+    panel.innerHTML=`<div class="panel-empty"><div class="kicker">AstroSheep mission control</div><h3>No target selected</h3><p>AstroSheep is waiting for a new observing mission. Choose a Messier object from the side list or tap a marker on the planisphere.</p></div>`;
     return;
   }
   const min=+minAltEl.value;
